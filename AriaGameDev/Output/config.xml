@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<config>
+	<app framerate_cap="60" Capto30="false">
+		<title> Spannish Flea World</title>
+		<organization>UPC</organization>
+	</app>
+	
+	<player>
+		<startPos x="251" y="273" />
+		<lifes value="3" />
+		<isAlive value="true" />
+		<deathAnimation value="false" />
+	</player>
+	
+	<renderer>
+		<vsync value="false" />
+		<camera x="-289" y="0" />
+	</renderer>
+	
+	<window>
+		<resolution width="1080" height="480" scale="1" />
+		<fullscreen value="false" />
+		<borderless value="false" />
+		<resizable value="false" />
+		<fullscreen_window value="false" />
+	</window>
+
+	<map>
+		<folder>Assets/maps/</folder>
+	</map>
+</config>
