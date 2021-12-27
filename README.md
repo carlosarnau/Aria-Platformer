@@ -15,6 +15,7 @@ GitHub project link: https://github.com/carlosarnau/Aria-Platformer
 <p>&nbsp;</p>
 
 ## GAME CONTROLS
+
 ~~~~~~~~~~~~~~~
 
 Keyboard Player controls:
