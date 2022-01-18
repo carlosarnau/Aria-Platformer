@@ -19,12 +19,12 @@
 #include <iostream>
 #include <sstream>
 
+
 // Constructor
 App::App(int argc, char* args[]) : argc(argc), args(args)
 {
 	frames = 0;
 	PERF_START(ptimer);
-	
 
 	win = new Window();
 	input = new Input();
@@ -55,7 +55,6 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(flyingenemy);
 	AddModule(walkingenemy);
 	
-
 	// Render last to swap buffer
 	AddModule(render);
 
@@ -86,7 +85,6 @@ void App::AddModule(Module* module)
 // Called before render is available
 bool App::Awake()
 {
-
 	PERF_START(ptimer);
 
 	pugi::xml_document configFile;
@@ -110,7 +108,6 @@ bool App::Awake()
 		Capto30 = config.child("app").attribute("Capto30").as_bool();
 		vSyncBool = config.child("renderer").child("vsync").attribute("value").as_bool();
 	}
-
 
 	if (ret == true)
 	{
@@ -136,7 +133,6 @@ bool App::Awake()
 // Called before the first frame
 bool App::Start()
 {
-
 	PERF_START(ptimer);
 
 	bool ret = true;
@@ -148,7 +144,6 @@ bool App::Start()
 		ret = item->data->Start();
 		item = item->next;
 	}
-
 
 	PERF_PEEK(ptimer);
 
@@ -188,8 +183,6 @@ bool App::Update()
 			framerateCap = 60;
 		}
 	}
-
-	
 
 	long elapsedTime = (float)(end - init);
 	(float)SDL_GetPerformanceFrequency();
@@ -262,7 +255,6 @@ void App::FinishUpdate()
 // Call modules before each loop iteration
 bool App::PreUpdate()
 {
-
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
@@ -328,7 +320,6 @@ bool App::PostUpdate()
 // Called before quitting
 bool App::CleanUp()
 {
-
 	PERF_START(ptimer);
 
 	bool ret = true;
@@ -409,7 +400,6 @@ bool App::LoadGame()
 		item = item->next;
 	}
 	
-
 	loadGameRequested = false;
 
 	return ret;
@@ -444,9 +434,8 @@ bool App::SaveGame() const
 	return ret;
 }
 
-void App::CalculateFramerate() {
-
-
+void App::CalculateFramerate() 
+{
 	if (last_sec_frame_time.Read() > 1000)
 	{
 		last_sec_frame_time.Start();
@@ -459,8 +448,6 @@ void App::CalculateFramerate() {
 	last_frame_ms = frame_time.Read();
 	frames_on_last_update = prev_last_sec_frame_count;
 
-
-
 	if (Capto30 == true) 
 	{
 
@@ -472,18 +459,15 @@ void App::CalculateFramerate() {
 		if (delay > 0)
 			SDL_Delay((uint32)delay);
 
-
 		LOG("we waited %u and got back %f", delay, DelayTimer.ReadMs());
 	}
 }
 
-void App::DisplayFrameRateInfo() {
-
-
+void App::DisplayFrameRateInfo() 
+{
 	if (Capto30) 
 	{
 		static char title[256];
-
 
 		sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %02u Last sec frames: %i  Time since startup: %.3f Frame Count: %lu  CapedTo30:On  vSync:Off",
 			avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
@@ -491,8 +475,8 @@ void App::DisplayFrameRateInfo() {
 		app->win->SetTitle(title);
 	}
 
-	else {
-
+	else 
+	{
 		static char title[256];
 		sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %02u Last sec frames: %i  Time since startup: %.3f Frame Count: %lu  CapedTo30:Off  vSync:Off",
 			avg_fps, last_frame_ms, frames_on_last_update, seconds_since_startup, frame_count);
@@ -501,6 +485,4 @@ void App::DisplayFrameRateInfo() {
 
 
 	}
-
 }
-

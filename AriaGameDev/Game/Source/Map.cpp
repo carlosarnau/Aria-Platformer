@@ -1,17 +1,15 @@
-
 #include "App.h"
 #include "Render.h"
 #include "Textures.h"
 #include "Map.h"
 #include"Physics.h"
-
 #include "Defs.h"
 #include "Log.h"
 
 #include <iostream>
 #include <string.h>
-
 #include <math.h>
+
 
 Map::Map() : Module(), mapLoaded(false)
 {
@@ -36,7 +34,6 @@ bool Map::Awake(pugi::xml_node& config)
 // Draw the map (all requried layers)
 void Map::Draw()
 {
-	
 	if (mapLoaded == false)
 		return;
 
@@ -67,30 +64,24 @@ void Map::Draw()
 	// L04: TODO 5: Prepare the loop to draw all tiles in a layer + DrawTexture()
 	ListItem<MapLayer*>* mapLayerIterator = mapData.maplayers.start;
 	
-
-		for (int x = 0; x < mapData.maplayers.start->data->width; x++)
+	for (int x = 0; x < mapData.maplayers.start->data->width; x++)
+	{
+		for (int y = 0; y < mapData.maplayers.start->data->height; y++)
 		{
-			for (int y = 0; y < mapData.maplayers.start->data->height; y++)
-			{
+			int gid = mapData.maplayers.start->data->Get(x, y);
 
-				int gid = mapData.maplayers.start->data->Get(x, y);
+			SDL_Rect rect = mapData.tilesets.start->data->GetTileRect(gid);
+			iPoint screenPos = MapToWorld(x, y);
 
-				SDL_Rect rect = mapData.tilesets.start->data->GetTileRect(gid);
-				iPoint screenPos = MapToWorld(x, y);
+			app->render->DrawTexture(mapData.tilesets.start->data->texture, screenPos.x, screenPos.y, &rect);
 
-				app->render->DrawTexture(mapData.tilesets.start->data->texture, screenPos.x, screenPos.y, &rect);
-
-			}
 		}
-
-
+	}
 
 	//L04: TODO 9: Complete the draw function (inside the loop from TODO 5)
 	//Find which tile id is on x, y coordinates 
 	//Find out that Tile’s Rect inside the tileset Image (
 	//Find out where in the World(screen) we have to draw
-	
-
 }
 
 // L04: TODO 8: Create a method that translates x,y coordinates from map positions to world positions
@@ -128,14 +119,11 @@ SDL_Rect TileSet::GetTileRect(int id) const
 	int relativeIndex = id - firstgid;
 	
 	// L04: TODO 7: Get relative Tile rectangle
-
 	rect.w = tile_width;
 	rect.h = tile_height;
 
 	rect.x = margin + (tile_width + spacing) * (relativeIndex % columns);
 	rect.y = margin + (tile_height + spacing) * (relativeIndex / columns);
-
-	
 
 	return rect;
 }
@@ -177,7 +165,6 @@ bool Map::Load(const char* filename)
     bool ret = true;
     SString tmp("%s%s", folder.GetString(), filename);
 
-	
     pugi::xml_parse_result result = mapFile.load_file(tmp.GetString());
 
     if(result == NULL)
@@ -205,8 +192,6 @@ bool Map::Load(const char* filename)
     if(ret == true)
     {
         // L03: TODO 5: LOG all the data loaded iterate all tilesets and LOG everything
-
-
 		// L04: TODO 4: LOG the info for each loaded layer
     }
 	
@@ -242,10 +227,9 @@ bool Map::LoadMap(pugi::xml_node mapFile)
 }
 
 // L03: DONE 4: Implement the LoadTileSet function to load the tileset properties
-bool Map::LoadTileSets(pugi::xml_node mapFile) {
-
+bool Map::LoadTileSets(pugi::xml_node mapFile) 
+{
 	bool ret = true;
-
 
 	pugi::xml_node tileset;
 	//pugi::xml_node tilesetIterator = tileset = mapFile.child("tileset");
@@ -338,7 +322,8 @@ bool Map::LoadLayer(pugi::xml_node& node, MapLayer* layer)
 }
 
 // L04: TODO 4: Iterate all layers and load each of them
-bool Map::LoadAllLayers(pugi::xml_node mapNode) {
+bool Map::LoadAllLayers(pugi::xml_node mapNode) 
+{
 	bool ret = true; 
 	for (pugi::xml_node layerNode = mapNode.child("layer"); layerNode && ret; layerNode = layerNode.next_sibling("layer"))
 	{
@@ -355,7 +340,6 @@ bool Map::LoadAllLayers(pugi::xml_node mapNode) {
 
 // 1 is the id of the flying enemy
 
-
 bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer, int navLayerId) const
 {
 	bool ret = false;
@@ -368,8 +352,7 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer, int navL
 
 		if (layer->properties.GetProperty("Navigation", navLayerId) == 1) // If we have the properties that we want then true
 		{
-
-			uchar* mapa = new uchar[layer->width * layer->height]; // sring that store tiles
+			uchar* mapa = new uchar[layer->width * layer->height]; // Sring that store tiles
 			memset(mapa, 1, layer->width * layer->height);
 
 			for (int y = 0; y < mapData.height; ++y)
@@ -383,7 +366,7 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer, int navL
 
 					if (tileset != NULL)
 					{
-						mapa[i] = (tileId - tileset->firstgid) > 0 ? 0 : 1; // store tiles id's at their position
+						mapa[i] = (tileId - tileset->firstgid) > 0 ? 0 : 1; // Store tiles id's at their position
 					}
 				}
 			}
@@ -393,9 +376,6 @@ bool Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer, int navL
 			ret = true;
 			break;
 		}	
-
-		
-
 		break;
 	}
 

@@ -3,6 +3,7 @@
 
 #include "Defs.h"
 
+
 // Contains items from double linked list
 template<class tdata>
 struct ListItem
@@ -25,19 +26,14 @@ struct ListItem
 template<class tdata>
 class List
 {
-
-
 public:
-
 	ListItem<tdata>* start;
 	ListItem<tdata>* end;
 
 private:
-
 	unsigned int size;
 
 public:
-
 	// Constructor
 	inline List()
 	{
@@ -56,9 +52,6 @@ public:
 	{
 		return size;
 	}
-
-
-	//
 
 	ListItem<tdata>* getFirst() const
 	{
@@ -167,12 +160,11 @@ public:
 			++pos;
 			p_item = p_item->next;
 		}
-
 		return(p_item->data);
 	}
 
-	/**
-	* const read operator access directly to a position in the list
+	/*
+	Const read operator access directly to a position in the list
 	*/
 	const tdata& operator [](const unsigned int index) const
 	{
@@ -197,8 +189,8 @@ public:
 		return(p_item->data);
 	}
 
-	/**
-	* const read operator access directly to a position in the list
+	/*
+	Const read operator access directly to a position in the list
 	*/
 	const List<tdata>& operator +=(const List<tdata>& other_list)
 	{
@@ -213,8 +205,8 @@ public:
 		return(*this);
 	}
 
-	/**
-	* const access to a node in a position in the list
+	/*
+	Const access to a node in a position in the list
 	*/
 	const ListItem<tdata>* At(unsigned int index) const
 	{
@@ -232,8 +224,8 @@ public:
 		return p_item;
 	}
 
-	/**
-	* access to a node in a position in the list
+	/*
+	Access to a node in a position in the list
 	*/
 	ListItem<tdata>* At(unsigned int index)
 	{
@@ -278,8 +270,8 @@ public:
 		return ret;
 	}
 
-	/**
-	* returns the first apperance of data as index (-1 if not found)
+	/*
+	Returns the first apperance of data as index (-1 if not found)
 	*/
 	int find(const tdata& data)
 	{

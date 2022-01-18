@@ -19,6 +19,7 @@
 #include "Defs.h"
 #include "Log.h"
 
+
 Scene::Scene(bool startEnabled) : Module()
 {
 	name.Create("scene");
@@ -195,14 +196,14 @@ bool Scene::Start()
 	2463, 128
 	};
 
-	// id's :
-	// 0 map
-	// 1 player
-	// 2 water
-	// 3 holes
-	// 4 win
+	// Id's :
+	// 0 Map
+	// 1 Player
+	// 2 Water
+	// 3 Holes
+	// 4 Win
 
-	// map
+	// Map
 	static_chains.add(app->physics->CreateStaticChain(0, 0, map, 142));
 	static_chains.getLast()->data->id = 0;
 	static_chains.getLast()->data->listener = this;
@@ -234,9 +235,7 @@ bool Scene::Start()
 	static_chains.getLast()->data->id = 0;
 	static_chains.getLast()->data->listener = this;
 
-	// FlyingEnemiesList.add(app->flyingenemy->CreateFlyingEnemy(50,50));
-
-	// water
+	// Water
 	sensor_water01 = app->physics->CreateRectangleSensor(240, 455, 250, 60);
 	sensor_water01->id = 2;
 	sensor_water01->listener = this;
@@ -249,7 +248,7 @@ bool Scene::Start()
 	sensor_water03->id = 2;
 	sensor_water03->listener = this;
 
-	// holes
+	// Holes
 	sensor_fall01 = app->physics->CreateRectangleSensor(420, 550, 100, 60);
 	sensor_fall01->id = 3;
 	sensor_fall01->listener = this;
@@ -262,7 +261,7 @@ bool Scene::Start()
 	sensor_fall03->id = 3;
 	sensor_fall03->listener = this;
 
-	// win
+	// Win
 	sensor_win = app->physics->CreateRectangleSensor(2550, 310, 20, 85);
 	sensor_win->id = 4;
 	sensor_win->listener = this;
@@ -330,7 +329,6 @@ bool Scene::Update(float dt)
 		ResetLevel();
 	}
 	
-
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
 	// Draw map
@@ -359,7 +357,6 @@ bool Scene::PostUpdate()
 
 	return ret;
 }
-
 
 // Used to pass to the second level
 bool Scene::PassLevelCondition()
@@ -393,7 +390,6 @@ bool Scene::WinLoseCondition()
 	}
 }
 
-
 // Called before quitting
 bool Scene::CleanUp()
 {
@@ -404,7 +400,6 @@ bool Scene::CleanUp()
 
 void Scene::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	
 }
 
 void Scene::ResetLevel()
@@ -433,10 +428,7 @@ void Scene::ResetLevel()
 	app->walkingenemy->deathAnimAllowed = false;
 	app->walkingenemy->statesInt = 0;
 
-	
-
 	app->walkingenemy->ColHitbox->body->SetTransform(v, 0);
-
 
 	// Flying enemy
 
@@ -448,8 +440,5 @@ void Scene::ResetLevel()
 	app->flyingenemy->deathAnimAllowed = false;
 	app->flyingenemy->statesInt = 0;
 
-
-
 	app->flyingenemy->ColHitbox->body->SetTransform(v, 0);
-
 }

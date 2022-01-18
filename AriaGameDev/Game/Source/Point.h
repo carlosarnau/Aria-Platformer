@@ -5,11 +5,11 @@
 
 #include <math.h>
 
+
 template<class TYPE>
 class Point
 {
 public:
-
 	TYPE x, y;
 
 	Point()
@@ -132,7 +132,6 @@ template<class TYPE>
 class Vector : public Point<TYPE>
 {
 public:
-
 	Vector() : Point()
 	{}
 

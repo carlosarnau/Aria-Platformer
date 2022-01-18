@@ -2,9 +2,8 @@
 #define __p2List_H__
 
 
-
-/**
-* Contains items from double linked list
+/*
+Contains items from double linked list
 */
 template<class tdata>
 struct p2List_item
@@ -23,23 +22,21 @@ struct p2List_item
 	{}
 };
 
-/**
-* Manages a double linked list
+/*
+Manages a double linked list
 */
 template<class tdata>
 class p2List
 {
 
 private:
-
 	p2List_item<tdata>*   start;
 	p2List_item<tdata>*   end;
 	unsigned int  size;
 
 public:
-
-	/**
-	* Constructor
+	/*
+	Constructor
 	*/
 	inline p2List()
 	{
@@ -47,8 +44,8 @@ public:
 		size = 0;
 	}
 
-	/**
-	* Destructor
+	/*
+	Destructor
 	*/
 	~p2List()
 	{
@@ -65,16 +62,16 @@ public:
 		return end;
 	}
 
-	/**
-	* Get Size
+	/*
+	Get Size
 	*/
 	unsigned int count() const
 	{
 		return size;
 	}
 
-	/**
-	* Add new item
+	/*
+	Add new item
 	*/
 	p2List_item<tdata>* add(const tdata& item)
 	{
@@ -95,8 +92,8 @@ public:
 		return(p_data_item);
 	}
 
-	/**
-	* Find by index
+	/*
+	Find by index
 	*/
 	bool at(unsigned int index, tdata& data) const
 	{
@@ -116,8 +113,8 @@ public:
 		return ret;
 	}
 
-	/**
-	* Deletes an item from the list
+	/*
+	Deletes an item from the list
 	*/
 	bool del(p2List_item<tdata>* item)
 	{
@@ -158,8 +155,8 @@ public:
 		return(true);
 	}
 
-	/**
-	* Destroy and free all mem
+	/*
+	Destroy and free all mem
 	*/
 	void clear()
 	{
@@ -173,13 +170,12 @@ public:
 			delete (p_data);
 			p_data = p_next;
 		}
-
 		start = end = NULL;
 		size = 0;
 	}
 
-	/**
-	* returns the first apperance of data as index (-1 if not found)
+	/*
+	Returns the first apperance of data as index (-1 if not found)
 	*/
 	int find(const tdata& data)
 	{
@@ -190,16 +186,14 @@ public:
 		{
 			if(tmp->data == data)
 				return(index);
-
 			++index;
 			tmp = tmp->next;
 		}
 		return (-1);
 	}
 
-
-	/**
-	* returns the first apperance of data as index (-1 if not found)
+	/*
+	Returns the first apperance of data as index (-1 if not found)
 	*/
 	p2List_item<tdata>* findNode(const tdata& data)
 	{
@@ -211,7 +205,6 @@ public:
 				return(tmp);
 			tmp = tmp->next;
 		}
-
 		return (NULL);
 	}
 };

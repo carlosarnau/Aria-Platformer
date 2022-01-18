@@ -10,15 +10,14 @@
 
 #define TMP_STRING_SIZE	4096
 
+
 class SString
 {
 private:
-
 	char* str;
 	unsigned int size;
 
 public:
-
 	// Constructors
 	SString()
 	{
@@ -103,7 +102,6 @@ public:
 			Alloc(1);
 			Clear();
 		}
-
 		return *this;
 	}
 
@@ -304,7 +302,6 @@ public:
 					}
 				}
 			}
-
 		}
 
 		return instances;
@@ -327,7 +324,6 @@ public:
 				}
 			}
 		}
-
 		return ret;
 	}
 
@@ -356,13 +352,11 @@ public:
 	}
 
 private:
-
 	void Alloc(unsigned int requiered_memory)
 	{
 		size = requiered_memory;
 		str = new char[size];
 	}
-
 };
 
 #endif // __SString_H__

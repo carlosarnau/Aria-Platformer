@@ -1,11 +1,11 @@
 #include "App.h"
 #include "Input.h"
 #include "Window.h"
-
 #include "Defs.h"
 #include "Log.h"
 
 #include "SDL/include/SDL.h"
+
 
 #define MAX_KEYS 300
 
@@ -140,7 +140,6 @@ bool Input::CleanUp()
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }
-
 
 bool Input::GetWindowEvent(EventWindow ev)
 {

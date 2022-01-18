@@ -11,15 +11,17 @@
 #include "Render.h"
 #include "Window.h"
 #include "Audio.h"
+
 #include <stdio.h>
 #include <iostream>
 #include <string>
 #include <math.h>
+
 #include "SDL/include/SDL.h"
+
 
 FlyingEnemy::FlyingEnemy()
 {
-
 	name.Create("flyingenemy");
 
 	texture = nullptr;
@@ -114,8 +116,6 @@ FlyingEnemy::FlyingEnemy()
 	deathFromLeftAnim.speed = idleSpeed;
 }
 
-
-
 FlyingEnemy::~FlyingEnemy()
 {
 
@@ -126,7 +126,6 @@ bool FlyingEnemy::Awake()
 
 	return true;
 }
-
 
 // Called before the first frame
 bool FlyingEnemy::Start()
@@ -139,12 +138,12 @@ bool FlyingEnemy::Start()
 	startPosY = 150;
 	speed = { 1.3f,0 };
 	
-	// id's :
-	// 0 nothing
-	// 1 player
-	// 2 water
-	// 3 holes
-	// 4 win
+	// Id's :
+	// 0 Nothing
+	// 1 Player
+	// 2 Water
+	// 3 Holes
+	// 4 Win
 	// 5 Flying Enemy
 	// 6 Walking Enemy
 
@@ -152,14 +151,12 @@ bool FlyingEnemy::Start()
 	ColHitbox->id = 5;
 	ColHitbox->listener = app->flyingenemy;
 
-
-	 int x_ = (int)x;
-	 int y_ = (int)y;
-	 ColHitbox->GetPosition(x_, y_);
-	 actualState = PATROLLING;
-	 isAlive = true; 
-	 lifes = 2; 
-
+	int x_ = (int)x;
+	int y_ = (int)y;
+	ColHitbox->GetPosition(x_, y_);
+	actualState = PATROLLING;
+	isAlive = true; 
+	lifes = 2; 
 
 	LOG("Loading Flying Enemy");
 
@@ -192,235 +189,211 @@ bool FlyingEnemy::Update(float dt)
 		}
 	}
 
-	
-
 	if (app->player->GetPlayerWin() == true)
 	{
 		actualState = PATROLLING;
 	}
 	
-	
 	switch (actualState)
 	{
-	case CHASING_PLAYER:
-	{
-		// chase the player
-	
-		// Make the pathfinding
-	
-		// advance one tile
-
-		iPoint playerPos;
-		app->player->GetColHitbox()->GetPosition(playerPos.x, playerPos.y);
-
-		ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
-		directionPoint = app->map->WorldToMap(positionOfTheObject.x, positionOfTheObject.y);
-
-		playerPos = app->map->WorldToMap(playerPos.x + 15, playerPos.y + 15);
-
-		app->pathfinding->CreatePath(directionPoint, playerPos);
-
-		iPoint NextPos;
-
-		const DynArray<iPoint>* lastPath = app->pathfinding->GetLastPath();
-
-		if (lastPath->Count() > 1)
+		case CHASING_PLAYER:
 		{
-			iPoint path(lastPath->At(1)->x, lastPath->At(1)->y);
-			NextPos = path;
-		}
+			// Chase the player
+	
+			// Make the pathfinding
+	
+			// Advance one tile
 
-		directionPoint = NextPos;
+			iPoint playerPos;
+			app->player->GetColHitbox()->GetPosition(playerPos.x, playerPos.y);
 
-		if (app->physics->debug == true)
-		{
-			const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
+			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
+			directionPoint = app->map->WorldToMap(positionOfTheObject.x, positionOfTheObject.y);
 
-			for (uint i = 0; i < path->Count(); ++i)
+			playerPos = app->map->WorldToMap(playerPos.x + 15, playerPos.y + 15);
+
+			app->pathfinding->CreatePath(directionPoint, playerPos);
+
+			iPoint NextPos;
+
+			const DynArray<iPoint>* lastPath = app->pathfinding->GetLastPath();
+
+			if (lastPath->Count() > 1)
 			{
-				iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-				app->render->DrawTexture(app->scene->pathTex, pos.x, pos.y);
+				iPoint path(lastPath->At(1)->x, lastPath->At(1)->y);
+				NextPos = path;
 			}
-		}
 
-	
-	}break;
-	case PATROLLING:
-	{
-		//  Maintain the position
+			directionPoint = NextPos;
 
-		ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
-		directionPoint = app->map->WorldToMap( positionOfTheObject.x, positionOfTheObject.y );
-		
-
-		iPoint playerPos;
-
-		ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
-		directionPoint = app->map->WorldToMap(positionOfTheObject.x, positionOfTheObject.y);
-
-		playerPos = app->map->WorldToMap(playerPos.x + 15, playerPos.y + 15);
-
-		app->pathfinding->CreatePath(directionPoint, {27,11});
-
-		iPoint NextPos;
-
-		const DynArray<iPoint>* lastPath = app->pathfinding->GetLastPath();
-
-		if (lastPath->Count() > 1)
-		{
-			iPoint path(lastPath->At(1)->x, lastPath->At(1)->y);
-			NextPos = path;
-		}
-
-		directionPoint = NextPos;
-
-		if (app->physics->debug == true)
-		{
-			const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
-
-			for (uint i = 0; i < path->Count(); ++i)
+			if (app->physics->debug == true)
 			{
-				iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-				app->render->DrawTexture(app->scene->pathTex, pos.x, pos.y);
-			}
-		}
-	
-	}break;
-	case DEATH:
-	{
-		ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
-		directionPoint = app->map->WorldToMap(positionOfTheObject.x, positionOfTheObject.y);
+				const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
 
-		isAlive = false;
-		deathAnimAllowed = true;
-		ColHitbox->id = 0;
+				for (uint i = 0; i < path->Count(); ++i)
+				{
+					iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+					app->render->DrawTexture(app->scene->pathTex, pos.x, pos.y);
+				}
+			}
+		}break;
+		case PATROLLING:
+		{
+			// Maintain the position
+			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
+			directionPoint = app->map->WorldToMap( positionOfTheObject.x, positionOfTheObject.y );
 		
-	}break;
+			iPoint playerPos;
+
+			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
+			directionPoint = app->map->WorldToMap(positionOfTheObject.x, positionOfTheObject.y);
+
+			playerPos = app->map->WorldToMap(playerPos.x + 15, playerPos.y + 15);
+
+			app->pathfinding->CreatePath(directionPoint, {27,11});
+
+			iPoint NextPos;
+
+			const DynArray<iPoint>* lastPath = app->pathfinding->GetLastPath();
+
+			if (lastPath->Count() > 1)
+			{	
+				iPoint path(lastPath->At(1)->x, lastPath->At(1)->y);
+				NextPos = path;
+			}
+
+			directionPoint = NextPos;
+
+			if (app->physics->debug == true)
+			{
+				const DynArray<iPoint>* path = app->pathfinding->GetLastPath();
+
+				for (uint i = 0; i < path->Count(); ++i)
+				{
+					iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+					app->render->DrawTexture(app->scene->pathTex, pos.x, pos.y);
+				}
+			}
+		}break;
+		case DEATH:
+		{
+			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
+			directionPoint = app->map->WorldToMap(positionOfTheObject.x, positionOfTheObject.y);
+
+			isAlive = false;
+			deathAnimAllowed = true;
+			ColHitbox->id = 0;
+		}break;
 	}
-	
-	
-	
-	
 
-// Enemy movement 
-
+	// Enemy movement 
 	if (isAlive == true)
 	{
 		switch (actualState)
 		{
-		case CHASING_PLAYER:
-		{
-			// chase the player
-
-			// Make the pathfinding
-
-			// advance one tile
-
-			directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y -1); // pixels
-			//directionPoint = app->map->MapToWorld(4, 4); // pixels	
-
-			directionPoint = { directionPoint.x + 13, directionPoint.y + 16 };
-
-			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y); // pixels
-
-
-
-			if (directionPoint.x < positionOfTheObject.x)
+			case CHASING_PLAYER:
 			{
-				if (ColHitbox->body->GetLinearVelocity().x > -0.1f)
+				// Chase the player
+
+				// Make the pathfinding
+
+				// Advance one tile
+
+				directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y -1); // Pixels
+				//directionPoint = app->map->MapToWorld(4, 4); // pixels	
+
+				directionPoint = { directionPoint.x + 13, directionPoint.y + 16 };
+
+				ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y); // Pixels
+
+				if (directionPoint.x < positionOfTheObject.x)
 				{
-					ColHitbox->body->ApplyLinearImpulse({ -0.1f,0.0f }, ColHitbox->body->GetPosition(), true);
+					if (ColHitbox->body->GetLinearVelocity().x > -0.1f)
+					{
+						ColHitbox->body->ApplyLinearImpulse({ -0.1f,0.0f }, ColHitbox->body->GetPosition(), true);
+					}
 				}
 
-			}
-
-			if (directionPoint.x > positionOfTheObject.x)
-			{
-				if (ColHitbox->body->GetLinearVelocity().x < 0.9f)
+				if (directionPoint.x > positionOfTheObject.x)
 				{
-					ColHitbox->body->ApplyLinearImpulse({ 0.1f,0.0f }, ColHitbox->body->GetPosition(), true);
-				}
-			}
-
-			if (directionPoint.y + 25 < positionOfTheObject.y)
-			{
-				if (ColHitbox->body->GetLinearVelocity().y > -0.2f)
-				{
-					ColHitbox->body->ApplyLinearImpulse({ 0.0f,-0.1f }, ColHitbox->body->GetPosition(), true);
-				}
-			}
-
-		}break;
-		case PATROLLING:
-		{
-			//  Maintain the position
-
-			directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y-1); // pixels
-			//directionPoint = app->map->MapToWorld(4, 4); // pixels	
-
-			directionPoint = { directionPoint.x + 13, directionPoint.y + 16 };
-
-			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y); // pixels
-
-
-
-			if (directionPoint.x < positionOfTheObject.x)
-			{
-				if (ColHitbox->body->GetLinearVelocity().x > -0.1f)
-				{
-					ColHitbox->body->ApplyLinearImpulse({ -0.1f,0.0f }, ColHitbox->body->GetPosition(), true);
+					if (ColHitbox->body->GetLinearVelocity().x < 0.9f)
+					{
+						ColHitbox->body->ApplyLinearImpulse({ 0.1f,0.0f }, ColHitbox->body->GetPosition(), true);
+					}
 				}
 
-			}
-
-			if (directionPoint.x > positionOfTheObject.x)
-			{
-				if (ColHitbox->body->GetLinearVelocity().x < 0.1f)
+				if (directionPoint.y + 25 < positionOfTheObject.y)
 				{
-					ColHitbox->body->ApplyLinearImpulse({ 0.1f,0.0f }, ColHitbox->body->GetPosition(), true);
+					if (ColHitbox->body->GetLinearVelocity().y > -0.2f)
+					{
+						ColHitbox->body->ApplyLinearImpulse({ 0.0f,-0.1f }, ColHitbox->body->GetPosition(), true);
+					}
 				}
-			}
 
-			if (directionPoint.y + 32 < positionOfTheObject.y)
+			}break;
+			case PATROLLING:
 			{
-				if (ColHitbox->body->GetLinearVelocity().y > -0.2f)
+				// Maintain the position
+
+				directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y-1); // Pixels
+				//directionPoint = app->map->MapToWorld(4, 4); // pixels	
+
+				directionPoint = { directionPoint.x + 13, directionPoint.y + 16 };
+
+				ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y); // Pixels
+
+				if (directionPoint.x < positionOfTheObject.x)
 				{
-					ColHitbox->body->ApplyLinearImpulse({ 0.0f,-0.1f }, ColHitbox->body->GetPosition(), true);
+					if (ColHitbox->body->GetLinearVelocity().x > -0.1f)
+					{
+						ColHitbox->body->ApplyLinearImpulse({ -0.1f,0.0f }, ColHitbox->body->GetPosition(), true);
+					}
 				}
-			}
 
-			//if (directionPoint.y + 10 > positionOfTheObject.y)
-			//{
-			//	if (ColHitbox->body->GetLinearVelocity().x < 0.2f)
-			//	{
-			//		ColHitbox->body->ApplyLinearImpulse({ 0.0f, 0.1f }, ColHitbox->body->GetPosition(), true);
-			//	}
-			//}
+				if (directionPoint.x > positionOfTheObject.x)
+				{
+					if (ColHitbox->body->GetLinearVelocity().x < 0.1f)
+					{
+						ColHitbox->body->ApplyLinearImpulse({ 0.1f,0.0f }, ColHitbox->body->GetPosition(), true);
+					}
+				}
 
+				if (directionPoint.y + 32 < positionOfTheObject.y)
+				{
+					if (ColHitbox->body->GetLinearVelocity().y > -0.2f)
+					{
+						ColHitbox->body->ApplyLinearImpulse({ 0.0f,-0.1f }, ColHitbox->body->GetPosition(), true);
+					}
+				}
 
-		}break;
-		case DEATH:
-		{
-			
-
-		}break;
+				//if (directionPoint.y + 10 > positionOfTheObject.y)
+				//{
+				//	if (ColHitbox->body->GetLinearVelocity().x < 0.2f)
+				//	{
+				//		ColHitbox->body->ApplyLinearImpulse({ 0.0f, 0.1f }, ColHitbox->body->GetPosition(), true);
+				//	}
+				//}
+			}break;
+			case DEATH:
+			{
+			}break;
 		}		
 	}	
 
 	switch (actualState)
 	{
-	case PATROLLING:
-	{
-		statesInt = 0;
-	}break;
-	case CHASING_PLAYER:
-	{
-		statesInt = 1;
-	}break;
-	case DEATH:
-	{
-		statesInt = 2;
-	}
+		case PATROLLING:
+		{
+			statesInt = 0;
+		}break;
+		case CHASING_PLAYER:
+		{
+			statesInt = 1;
+		}break;
+		case DEATH:
+		{
+			statesInt = 2;
+		}
 	}
 
 	if (isAlive == true)
@@ -460,9 +433,7 @@ bool FlyingEnemy::Update(float dt)
 				direction = 5;
 			}
 		}
-
 	}
-
 
 	if (direction == 0)
 	{
@@ -498,9 +469,6 @@ bool FlyingEnemy::PostUpdate()
 {
 	app->render->DrawTexture(texture, positionOfTheObject.x - 5, positionOfTheObject.y, &currentAnimation->GetCurrentFrame());
 
-	
-
-
 	return true;
 }
 
@@ -521,8 +489,6 @@ void FlyingEnemy::SetEnemyLifes(int l)
 	lifes = l;
 }
 
-
-
 void FlyingEnemy::SetEnemyState(FLYING_ENEMY_STATE state)
 {
 	actualState = state;
@@ -539,18 +505,18 @@ bool FlyingEnemy::LoadState(pugi::xml_node& data)
 
 	switch (statesInt)
 	{
-	case 0:
-	{
-		actualState = PATROLLING;
-	}break;
-	case 1:
-	{
-		actualState = CHASING_PLAYER;
-	}break;
-	case 2:
-	{
-		actualState = DEATH;
-	}
+		case 0:
+		{
+			actualState = PATROLLING;
+		}break;
+		case 1:
+		{
+			actualState = CHASING_PLAYER;
+		}break;
+		case 2:
+		{
+			actualState = DEATH;
+		}
 	}
 
 	ColHitbox->body->SetTransform(v, 0);
@@ -569,8 +535,6 @@ bool FlyingEnemy::SaveState(pugi::xml_node& data) const
 	data.child("deathAnimation").attribute("value").set_value(deathAnimAllowed);
 	data.child("state").attribute("value").set_value(statesInt);
 
-	
-
 	return true;
 }
 
@@ -584,8 +548,7 @@ void FlyingEnemy::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		if ((bodyA->id == 5) && (bodyB->id == 7))
 		{
-
-		  // is hitted by the shield
+		  // Is hitted by the shield
 
 			if (lifes > 0)
 			{
@@ -600,7 +563,6 @@ void FlyingEnemy::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			{
 				app->audio->PlayFx(app->scene->edeath_fx);
 			}
-			
 		}
 	}
 }

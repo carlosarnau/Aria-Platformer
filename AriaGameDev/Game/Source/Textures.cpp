@@ -1,12 +1,12 @@
 #include "App.h"
 #include "Render.h"
 #include "Textures.h"
-
 #include "Defs.h"
 #include "Log.h"
 
 #include "SDL_image/include/SDL_image.h"
 //#pragma comment(lib, "../Game/Source/External/SDL_image/libx86/SDL2_image.lib")
+
 
 Textures::Textures() : Module()
 {

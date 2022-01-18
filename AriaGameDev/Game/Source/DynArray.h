@@ -5,17 +5,16 @@
 
 #define DYN_ARRAY_BLOCK_SIZE 16
 
+
 template<class VALUE>
 class DynArray
 {
 private:
-
 	VALUE* data;
 	unsigned int memCapacity;
 	unsigned int numElements;
 
 public:
-
 	// Constructors
 	DynArray() : memCapacity(0), numElements(0), data(NULL)
 	{
@@ -180,7 +179,6 @@ public:
 		return ret;
 	}
 
-
 	int BubbleSortOptimized()
 	{
 		int ret = 0;
@@ -204,7 +202,6 @@ public:
 		return ret;
 	}
 
-
 	int CombSort()
 	{
 		int ret = 0;
@@ -227,7 +224,6 @@ public:
 				}
 			}
 		}
-
 		return ret;
 	}
 
@@ -240,7 +236,6 @@ public:
 	}
 
 private:
-
 	// Private Utils
 	void Alloc(unsigned int mem)
 	{

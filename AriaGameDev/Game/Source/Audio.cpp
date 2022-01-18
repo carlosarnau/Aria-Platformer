@@ -1,6 +1,5 @@
 #include "App.h"
 #include "Audio.h"
-
 #include "Defs.h"
 #include "Log.h"
 
@@ -11,6 +10,7 @@
 
 // NOTE: Library linkage is configured in Linker Options
 //#pragma comment(lib, "../Game/Source/External/SDL_mixer/libx86/SDL2_mixer.lib")
+
 
 Audio::Audio() : Module()
 {
@@ -103,7 +103,7 @@ bool Audio::PlayMusic(const char* path, float fade_time)
 			Mix_HaltMusic();
 		}
 
-		// this call blocks until fade out is done
+		// This call blocks until fade out is done
 		Mix_FreeMusic(music);
 	}
 

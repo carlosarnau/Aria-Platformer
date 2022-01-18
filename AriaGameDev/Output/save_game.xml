@@ -9,28 +9,28 @@
 		<organization>UPC</organization>
 	</app>
 	<player>
-		<startPos x="1733" y="214" />
+		<startPos x="242" y="273" />
 		<lifes value="4" />
 		<isAlive value="true" />
 		<deathAnimation value="false" />
 	</player>
 	<walkingenemy>
-		<Pos x="1600" y="400" />
-		<lifes value="0" />
-		<isAlive value="false" />
-		<deathAnimation value="true" />
-		<state value="2" />
-	</walkingenemy>
-	<flyingenemy>
-		<Pos x="2003" y="171" />
+		<Pos x="925" y="213" />
 		<lifes value="2" />
 		<isAlive value="true" />
 		<deathAnimation value="false" />
-		<state value="1" />
+		<state value="0" />
+	</walkingenemy>
+	<flyingenemy>
+		<Pos x="929" y="203" />
+		<lifes value="2" />
+		<isAlive value="true" />
+		<deathAnimation value="false" />
+		<state value="0" />
 	</flyingenemy>
 	<renderer>
 		<vsync value="false" />
-		<camera x="1193" y="0" />
+		<camera x="-298" y="0" />
 	</renderer>
 	<window>
 		<resolution width="1080" height="720" scale="1" />

@@ -1,8 +1,8 @@
 #include "App.h"
 #include "PathFinding.h"
-
 #include "Defs.h"
 #include "Log.h"
+
 
 PathFinding::PathFinding() : Module(), map(NULL), lastPath(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
@@ -241,11 +241,9 @@ int PathFinding::CreatePath(const iPoint& origin, const iPoint& destination)
 					}
 				}
 			}
-
 			++iterations;
 		}
 	}
 
 	return ret;
 }
-

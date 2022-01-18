@@ -9,17 +9,16 @@
 
 #define DYN_ARRAY_BLOCK_SIZE 16
 
+
 template<class VALUE>
 class p2DynArray
 {
 private:
-
 	VALUE*			data;
 	unsigned int	mem_capacity;
 	unsigned int	num_elements;
 
 public:
-
 	// Constructors
 	p2DynArray() : mem_capacity(0), num_elements(0), data(NULL)
 	{
@@ -151,7 +150,6 @@ public:
 	}
 
 private:
-	
 	// Private Utils
 	void Alloc(unsigned int mem)
 	{

@@ -20,6 +20,7 @@
 #pragma comment( lib, "../Game/Source/External/Box2D/libx86/Release/Box2D.lib" )
 #endif
 
+
 Physics::Physics()
 {
 	world = NULL;
@@ -45,10 +46,9 @@ bool Physics::Start()
 	return true;
 }
 
-
 bool Physics::PreUpdate()
 {
-	// slow motion
+	// Slow motion
 	if (app->player->GetPlayerSlowMo() == false)
 	{
 		world->Step(app->GetDeltaTime(), 6, 2);
@@ -58,7 +58,6 @@ bool Physics::PreUpdate()
 		world->Step(app->GetDeltaTime()*0.2f, 6, 2);
 	}
 	
-
 	for (b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
 		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
@@ -69,7 +68,6 @@ bool Physics::PreUpdate()
 				pb1->listener->OnCollision(pb1, pb2);
 		}
 	}
-
 
 	return true;
 }
@@ -269,21 +267,16 @@ void Physics::CreateSpring(int x, int y)
 
 	b->CreateFixture(&fixture_spring);
 
-
 	the_joint->Initialize(box_01->body, b, b2Vec2(PIXEL_TO_METERS(605), PIXEL_TO_METERS(976)), b2Vec2(PIXEL_TO_METERS(605), PIXEL_TO_METERS(1003)));
 	the_joint->collideConnected = true;
 	b2PrismaticJoint* joint = (b2PrismaticJoint*)app->physics->GetWorld()->CreateJoint(the_joint);
-
-
 }
-
 
 b2World* Physics::GetWorld()
 {
 	return world;
 }
-
-// 
+ 
 bool Physics::PostUpdate()
 {
 	if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
@@ -297,8 +290,6 @@ bool Physics::PostUpdate()
 			debug = true;
 		}
 	}
-
-	
 
 	if (!debug)
 		return true;
@@ -315,65 +306,65 @@ bool Physics::PostUpdate()
 			switch (f->GetType())
 			{
 				// Draw circles ------------------------------------------------
-			case b2Shape::e_circle:
-			{
-				b2CircleShape* shape = (b2CircleShape*)f->GetShape();
-				b2Vec2 pos = f->GetBody()->GetPosition();
-				app->render->DrawCircle(METERS_TO_PIXELS(pos.x-camX), METERS_TO_PIXELS(pos.y - camY), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
-			}
-			break;
-
-			// Draw polygons ------------------------------------------------
-			case b2Shape::e_polygon:
-			{
-				b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
-				int32 count = polygonShape->GetVertexCount();
-				b2Vec2 prev, v;
-
-				for (int32 i = 0; i < count; ++i)
+				case b2Shape::e_circle:
 				{
-					v = b->GetWorldPoint(polygonShape->GetVertex(i));
-					if (i > 0)
-						app->render->DrawLine(METERS_TO_PIXELS(prev.x - camX * 2), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x - camX * 2), METERS_TO_PIXELS(v.y), 255, 100, 100);
-
-					prev = v;
+					b2CircleShape* shape = (b2CircleShape*)f->GetShape();
+					b2Vec2 pos = f->GetBody()->GetPosition();
+					app->render->DrawCircle(METERS_TO_PIXELS(pos.x-camX), METERS_TO_PIXELS(pos.y - camY), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
 				}
+				break;
 
-				v = b->GetWorldPoint(polygonShape->GetVertex(0));
-				app->render->DrawLine(METERS_TO_PIXELS(prev.x - camX * 2), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x - camX * 2), METERS_TO_PIXELS(v.y), 255, 100, 100);
-			}
-			break;
-
-			// Draw chains contour -------------------------------------------
-			case b2Shape::e_chain:
-			{
-				b2ChainShape* shape = (b2ChainShape*)f->GetShape();
-				b2Vec2 prev, v;
-
-				for (int32 i = 0; i < shape->m_count; ++i)
+				// Draw polygons ------------------------------------------------
+				case b2Shape::e_polygon:
 				{
-					v = b->GetWorldPoint(shape->m_vertices[i]);
-					if (i > 0)
-						app->render->DrawLine(METERS_TO_PIXELS(prev.x - camX*2), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x - camX*2), METERS_TO_PIXELS(v.y), 100, 255, 100);
-					prev = v;
+					b2PolygonShape* polygonShape = (b2PolygonShape*)f->GetShape();
+					int32 count = polygonShape->GetVertexCount();
+					b2Vec2 prev, v;
+
+					for (int32 i = 0; i < count; ++i)
+					{
+						v = b->GetWorldPoint(polygonShape->GetVertex(i));
+						if (i > 0)
+							app->render->DrawLine(METERS_TO_PIXELS(prev.x - camX * 2), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x - camX * 2), METERS_TO_PIXELS(v.y), 255, 100, 100);
+
+						prev = v;
+					}
+
+					v = b->GetWorldPoint(polygonShape->GetVertex(0));
+					app->render->DrawLine(METERS_TO_PIXELS(prev.x - camX * 2), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x - camX * 2), METERS_TO_PIXELS(v.y), 255, 100, 100);
 				}
+				break;
 
-				v = b->GetWorldPoint(shape->m_vertices[0]);
-				app->render->DrawLine(METERS_TO_PIXELS(prev.x - camX * 2), METERS_TO_PIXELS(prev.y ), METERS_TO_PIXELS(v.x - camX * 2), METERS_TO_PIXELS(v.y ), 100, 255, 100);
-			}
-			break;
+				// Draw chains contour -------------------------------------------
+				case b2Shape::e_chain:
+				{
+					b2ChainShape* shape = (b2ChainShape*)f->GetShape();
+					b2Vec2 prev, v;
 
-			// Draw a single segment(edge) ----------------------------------
-			case b2Shape::e_edge:
-			{
-				b2EdgeShape* shape = (b2EdgeShape*)f->GetShape();
-				b2Vec2 v1, v2;
+					for (int32 i = 0; i < shape->m_count; ++i)
+					{
+						v = b->GetWorldPoint(shape->m_vertices[i]);
+						if (i > 0)
+							app->render->DrawLine(METERS_TO_PIXELS(prev.x - camX*2), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x - camX*2), METERS_TO_PIXELS(v.y), 100, 255, 100);
+						prev = v;
+					}
 
-				v1 = b->GetWorldPoint(shape->m_vertex0);
-				v1 = b->GetWorldPoint(shape->m_vertex1);
-				app->render->DrawLine(METERS_TO_PIXELS(v1.x ), METERS_TO_PIXELS(v1.y ), METERS_TO_PIXELS(v2.x ), METERS_TO_PIXELS(v2.y), 100, 100, 255);
-			}
-			break;
+					v = b->GetWorldPoint(shape->m_vertices[0]);
+					app->render->DrawLine(METERS_TO_PIXELS(prev.x - camX * 2), METERS_TO_PIXELS(prev.y ), METERS_TO_PIXELS(v.x - camX * 2), METERS_TO_PIXELS(v.y ), 100, 255, 100);
+				}
+				break;
+
+				// Draw a single segment(edge) ----------------------------------
+				case b2Shape::e_edge:
+				{
+					b2EdgeShape* shape = (b2EdgeShape*)f->GetShape();
+					b2Vec2 v1, v2;
+
+					v1 = b->GetWorldPoint(shape->m_vertex0);
+					v1 = b->GetWorldPoint(shape->m_vertex1);
+					app->render->DrawLine(METERS_TO_PIXELS(v1.x ), METERS_TO_PIXELS(v1.y ), METERS_TO_PIXELS(v2.x ), METERS_TO_PIXELS(v2.y), 100, 100, 255);
+				}
+				break;
 			}
 
 			// TODO 1: If mouse button 1 is pressed ...
@@ -387,7 +378,6 @@ bool Physics::PostUpdate()
 	// TODO 2: If a body was selected, create a mouse joint
 	// using mouse_joint class property
 
-
 	// TODO 3: If the player keeps pressing the mouse button, update
 	// target position and draw a red line between both anchor points
 
@@ -395,7 +385,6 @@ bool Physics::PostUpdate()
 
 	return true;
 }
-
 
 // Called before quitting
 bool Physics::CleanUp()
@@ -409,8 +398,7 @@ bool Physics::CleanUp()
 }
 
 
-///// Physbody
-
+// Physbody
 void PhysBody::GetPosition(int& x, int& y) const
 {
 	b2Vec2 pos = body->GetPosition();
@@ -456,7 +444,7 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	{
 		if (fixture->GetShape()->RayCast(&output, input, body->GetTransform(), 0) == true)
 		{
-			// do we want the normal ?
+			// Do we want the normal ?
 
 			float fx = x2 - x1;
 			float fy = y2 - y1;
@@ -484,7 +472,6 @@ void Physics::BeginContact(b2Contact* contact)
 	if (physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
 }
-//
 
 b2Body* Physics::AddToWorld(b2BodyDef* body)
 {

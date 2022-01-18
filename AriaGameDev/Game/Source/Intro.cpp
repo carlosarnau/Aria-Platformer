@@ -180,13 +180,12 @@ bool Intro::Start()
 	2463, 128
 	};
 
-	// id's :
-	// 0 nothing
-	// 1 player
-	// 2 water
-	// 3 holes
-	// 4 win
-
+	// Id's :
+	// 0 Nothing
+	// 1 Player
+	// 2 Water
+	// 3 Holes
+	// 4 Win
 
 	static_chains.add(app->physics->CreateStaticChain(0, 0, map, 142));
 	static_chains.getLast()->data->id = 0;
@@ -251,7 +250,6 @@ bool Intro::Start()
 	sensor_win->id = 4;
 	sensor_win->listener = this;
 
-
 	// Uploading the assets
 	app->map->Load("level1.tmx");
 	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
@@ -260,12 +258,10 @@ bool Intro::Start()
 	fall_fx = app->audio->LoadFx("Assets/audio/fx/mixkit-lose-life-falling-2029.wav");
 	win_fx = app->audio->LoadFx("Assets/audio/fx/uno.wav");
 
-
 	if (app->player->Awake() == 0)
 	{
 		app->player->Awake();
 	}
-
 
 	return true;
 }
@@ -288,8 +284,7 @@ bool Intro::Update(float dt)
 	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->SaveGameRequest();
 
-
-	//std::cout << "    " << app->player->xposition << "      " << app->player->yposition <<std::endl;
+	//std::cout << "" << app->player->xposition << "" << app->player->yposition <<std::endl;
 
 	//app->render->DrawTexture(img, 380, 100); // Placeholder not needed any more
 
@@ -304,7 +299,6 @@ bool Intro::Update(float dt)
 	//
 	//app->win->SetTitle(title.GetString());
 
-
 	//app->collisions->AddCollider();
 
 	return true;
@@ -318,12 +312,8 @@ bool Intro::PostUpdate()
 	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 
-
-
 	return ret;
 }
-
-
 
 // Called before quitting
 bool Intro::CleanUp()
@@ -341,13 +331,11 @@ void Intro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	if (bodyB == nullptr)
 	{
-
 	}
 	else
 	{
 		if ((bodyA->id == 1) && (bodyB->id == 2))
 		{
-
 			if (app->player->GetPlayerLifes() > 0)
 			{
 				// fall in water loose one life
@@ -356,13 +344,10 @@ void Intro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
 
 				bodyA->body->ApplyLinearImpulse({ 0, -3.5f }, app->player->GetColHitbox()->body->GetPosition(), true);
-
 			}
 			else
 			{
 				//app->player->currentAnimation = &app->player->deathFromLeftAnim;
-
-
 				//app->player->SetPlayerLifes(3);
 			}
 		}
@@ -381,48 +366,33 @@ void Intro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			}
 			else
 			{
-
 				//app->player->currentAnimation=&app->player->deathFromRightAnim;
-
-
 				//app->player->SetPlayerLifes(3);
 			}
-
 		}
 		else if ((bodyA->id == 1) && (bodyB->id == 0))
 		{
-
 			if (app->player->GetPlayerLifes() > 0)
 			{
-
-
 			}
 			else
 			{
-
 				//app->player->currentAnimation=&app->player->deathFromRightAnim;
 				app->player->deathAnimAllowed = true;
-
 				//app->player->SetPlayerLifes(3);
 			}
-
 		}
 		else if ((bodyA->id == 1) && (bodyB->id == 4))
 		{
-
 			if (app->player->GetPlayerLifes() > 0)
 			{
 				Mix_HaltMusic();
 				app->audio->PlayFx(win_fx);
 				app->player->SetPlayerWin(true);
-
 			}
 			else
 			{
 			}
-
 		}
-
 	}
-
 }
