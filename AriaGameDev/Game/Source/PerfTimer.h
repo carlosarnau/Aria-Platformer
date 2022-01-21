@@ -4,11 +4,10 @@
 
 #include "Defs.h"
 
+
 class PerfTimer
 {
 public:
-
-	
 	PerfTimer();
 	~PerfTimer() {};
 

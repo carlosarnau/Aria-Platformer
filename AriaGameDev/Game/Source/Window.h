@@ -3,13 +3,13 @@
 
 #include "Module.h"
 
+
 struct SDL_Window;
 struct SDL_Surface;
 
 class Window : public Module
 {
 public:
-
 	Window();
 
 	// Destructor
@@ -33,7 +33,6 @@ public:
 	uint GetWidth() const;
 
 	uint GetHeight() const;
-
 
 public:
 	// The window we'll be rendering to

@@ -8,6 +8,7 @@
 #include "Textures.h"
 #include "Animation.h"
 
+
 struct SDL_Texture;
 
 //enum class FLYING_ENEMY_STATE
@@ -26,7 +27,6 @@ enum FLYING_ENEMY_STATE
 
 class FlyingEnemy : public Module
 {
-
 private:
 	float x, y;
 	b2Vec2 speed = { 1.3,0 };
@@ -101,8 +101,6 @@ public:
 		enemy.lifes = 2;
 		enemy.isAlive = true;
 		enemy.deathAnimAllowed = false;
-
-
 
 		return &enemy;
 	}

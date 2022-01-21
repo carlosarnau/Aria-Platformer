@@ -2,15 +2,12 @@
 #define __RENDER_H__
 
 #include "Module.h"
-
-
-
 #include "SDL/include/SDL.h"
+
 
 class Render : public Module
 {
 public:
-
 	Render();
 
 	// Destructor
@@ -47,7 +44,6 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 public:
-
 	SDL_Renderer* renderer;
 	SDL_Rect camera;
 	SDL_Rect viewport;

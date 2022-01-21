@@ -2,7 +2,6 @@
 #define __PATHFINDING_H__
 
 #include "Module.h"
-
 #include "Point.h"
 #include "DynArray.h"
 #include "List.h"
@@ -16,10 +15,10 @@
 // Details: http://theory.stanford.edu/~amitp/GameProgramming/
 // --------------------------------------------------
 
+
 class PathFinding : public Module
 {
 public:
-
 	PathFinding();
 
 	// Destructor
@@ -47,7 +46,6 @@ public:
 	uchar GetTileAt(const iPoint& pos) const;
 
 private:
-
 	// size of the map
 	uint width;
 	uint height;

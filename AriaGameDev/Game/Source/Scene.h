@@ -7,12 +7,12 @@
 #include "Defs.h"
 #include "FlyingEnemy.h"
 
+
 struct SDL_Texture;
 
 class Scene : public Module
 {
 public:
-
 	Scene(bool startEnabled);
 
 	// Destructor
@@ -46,7 +46,6 @@ public:
 
 	void ResetLevel();
 	
-	
 	uint water_fx;
 	uint fall_fx;
 	uint win_fx;
@@ -59,8 +58,6 @@ public:
 
 	uint shield_fx;
 	
-
-
 	int currentLevel;
 	SDL_Texture* pathTex;
 
@@ -69,7 +66,6 @@ private:
 
 	SDL_Texture* img;
 
-	
 	SDL_Texture* originTex;
 
 	SDL_Rect end_rect;

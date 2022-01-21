@@ -7,6 +7,7 @@
 #include "Module.h"
 #include "Animation.h"
 
+
 struct SDL_Texture;
 
 struct Vect2 {
@@ -15,7 +16,6 @@ struct Vect2 {
 
 class Player : public Module
 {
-
 private:
 	float startPosX;
 	float startPosY;
@@ -58,9 +58,6 @@ public:
 	bool GetPlayerSlowMo();
 	void SetPlayerSlowMo(bool b);
 
-	
-
-
 	PhysBody* GetColHitbox() const
 	{
 		return ColHitbox;
@@ -82,8 +79,6 @@ public:
 	}
 
 	//The player spritesheet loaded into an SDL_Texture
-	
-
 	// The pointer to the current player animation
 	// It will be switched depending on the player's movement direction
 	Animation* currentAnimation = nullptr;

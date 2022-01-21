@@ -4,8 +4,8 @@
 #include "Module.h"
 #include "List.h"
 #include "Point.h"
-
 #include "PugiXml\src\pugixml.hpp"
+
 
 // L03: DONE 2: Create a struct to hold information for a TileSet
 // Ignore Terrain Types and Tile Types for now, but we want the image!
@@ -111,7 +111,6 @@ struct MapData
 class Map : public Module
 {
 public:
-
     Map();
 
     // Destructor
@@ -136,7 +135,6 @@ public:
 	bool CreateWalkabilityMap(int& width, int& height, uchar** buffer, int navLayerId) const;
 
 private:
-
 	bool LoadMap(pugi::xml_node mapFile);
 
 	// L03: Methods to load all required map data
@@ -155,7 +153,6 @@ private:
 	TileSet* GetTilesetFromTileId(int id) const;
 
 public:
-
     // L03: DONE 1: Add your struct for map info
 	MapData mapData;
 

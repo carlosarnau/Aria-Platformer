@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Module.h"
 #include "Defs.h"
 #include "Box2D/Box2D/Box2D.h"
@@ -13,6 +12,7 @@
 
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
+
 
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
@@ -62,12 +62,11 @@ public:
 
 	b2World* world;
 	bool debug;
-private:
 
+private:
 	SDL_Texture *pathTex;
 	SDL_Texture* originTex;
 
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
-
 };

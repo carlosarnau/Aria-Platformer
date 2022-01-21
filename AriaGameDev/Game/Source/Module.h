@@ -2,8 +2,8 @@
 #define __MODULE_H__
 
 #include "SString.h"
-
 #include "PugiXml/src/pugixml.hpp"
+
 
 class App;
 class PhysBody;
@@ -11,7 +11,6 @@ class PhysBody;
 class Module
 {
 public:
-
 	Module() : active(false)
 	{}
 
@@ -73,10 +72,8 @@ public:
 	}
 
 public:
-
 	SString name;
 	bool active;
-
 };
 
 #endif // __MODULE_H__

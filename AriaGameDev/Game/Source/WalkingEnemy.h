@@ -8,8 +8,8 @@
 #include "Textures.h"
 #include "Animation.h"
 
-struct SDL_Texture;
 
+struct SDL_Texture;
 
 enum WALKING_ENEMY_STATE
 {
@@ -20,7 +20,6 @@ enum WALKING_ENEMY_STATE
 
 class WalkingEnemy : public Module
 {
-
 private:
 	float x, y;
 	b2Vec2 speed = { 1.3,0 };
@@ -66,7 +65,6 @@ public:
 	void SetEnemyState(WALKING_ENEMY_STATE state);
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
-	
 	Animation* currentAnimation = nullptr;
 	int direction;
 

@@ -5,6 +5,7 @@
 #include "SDL/include/SDL_rect.h"
 #define MAX_FRAMES 25
 
+
 class Animation
 {
 public:
@@ -21,7 +22,6 @@ private:
 	int pingpongDirection = 1;
 
 public:
-
 	void PushBack(const SDL_Rect& rect)
 	{
 		frames[totalFrames++] = rect;

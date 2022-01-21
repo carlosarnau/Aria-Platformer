@@ -4,10 +4,10 @@
 
 #include "Defs.h"
 
+
 class Timer
 {
 public:
-
 	// Constructor
 	Timer();
 	~Timer() {};

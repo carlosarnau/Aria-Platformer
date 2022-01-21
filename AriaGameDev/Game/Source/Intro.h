@@ -6,12 +6,12 @@
 #include "Point.h"
 #include "Defs.h"
 
+
 struct SDL_Texture;
 
 class Intro : public Module
 {
 public:
-
 	Intro(bool startEnabled);
 
 	// Destructor
@@ -40,7 +40,6 @@ public:
 	//Collider* playerWall[100] = { nullptr };
 
 private:
-
 	SDL_Texture* map;
 
 	SDL_Texture* img;
@@ -52,7 +51,6 @@ private:
 	//uint bonus_fx;
 
 	SDL_Rect end_rect;
-
 
 	List<PhysBody*> static_chains;
 	//p2List<PhysBody*> mapStaticBodies;

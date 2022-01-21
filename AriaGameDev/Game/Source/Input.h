@@ -7,6 +7,7 @@
 #define NUM_MOUSE_BUTTONS 5
 //#define LAST_KEYS_PRESSED_BUFFER 50
 
+
 struct SDL_Rect;
 
 enum EventWindow
@@ -27,9 +28,7 @@ enum KeyState
 
 class Input : public Module
 {
-
 public:
-
 	Input();
 
 	// Destructor
