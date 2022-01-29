@@ -86,6 +86,7 @@ Player::Player() : Module()
 	runningLeftAnim.loop = true;
 	runningLeftAnim.speed = movement2Speed;
 
+	/*
 	// Jumping animation right
 	jumpingRigthAnim.PushBack({ 297, 209, 16, 31 });
 	jumpingRigthAnim.PushBack({ 342, 208, 18, 32 });
@@ -105,6 +106,7 @@ Player::Player() : Module()
 	jumpingLeftAnim.PushBack({ 25, 206, 20, 34 });
 	jumpingLeftAnim.loop = true;
 	jumpingLeftAnim.speed = movement1Speed;
+	*/
 
 	// Getting hit right
 	hitFromRightAnim.PushBack({ 294, 255, 19, 33 });
@@ -311,6 +313,9 @@ bool Player::Update(float dt)
 			{
 				direction = 1;
 			}
+
+			// Disabled because it gets bugged
+			/*
 			else if ((ColHitbox->body->GetLinearVelocity().y != 0))
 			{
 				if (direction == 0) {
@@ -326,6 +331,7 @@ bool Player::Update(float dt)
 					direction = 5;
 				}
 			}
+			*/
 			else if ((ColHitbox->body->GetLinearVelocity().x == 0) && (ColHitbox->body->GetLinearVelocity().y == 0))
 			{
 				if (direction == 2) {
