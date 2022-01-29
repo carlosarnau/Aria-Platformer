@@ -130,6 +130,8 @@ bool WalkingEnemy::Awake()
 // Called before the first frame
 bool WalkingEnemy::Start()
 {
+	if (app->currentScene == LEVEL1)
+	{
 		// Textures
 		texture = app->tex->Load("Assets/sprites/Enemies.png");
 
@@ -160,12 +162,15 @@ bool WalkingEnemy::Start()
 		canJump = true;
 
 		LOG("Loading Flying Enemy");
-	
+	}
+
 	return true;
 }
 
 bool WalkingEnemy::Update(float dt)
 {
+	if (app->currentScene == LEVEL1)
+	{
 		if (lifes <= 0)
 		{
 			actualStates = DIE;
@@ -457,14 +462,17 @@ bool WalkingEnemy::Update(float dt)
 		currentAnimation->Update();
 
 		LOG("%i", lifes);
-	
+	}
 
 	return true;
 }
 
 bool WalkingEnemy::PostUpdate()
 {
+	if (app->currentScene == LEVEL1)
+	{
 		app->render->DrawTexture(texture, positionOfTheObject.x - 5, positionOfTheObject.y, &currentAnimation->GetCurrentFrame());
+	}
 	return true;
 }
 

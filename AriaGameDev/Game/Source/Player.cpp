@@ -152,6 +152,8 @@ bool Player::Awake()
 // Load assets
 bool Player::Start()
 {
+	if (app->currentScene == LEVEL1)
+	{
 		// Textures
 		texture = app->tex->Load("Assets/sprites/GraveRobber.png");
 
@@ -185,6 +187,7 @@ bool Player::Start()
 		slowMoHability = false;
 
 		LOG("Loading player");
+	}
 
 	return true;
 }
@@ -200,6 +203,8 @@ bool Player::CleanUp()
 // Update: draw background
 bool Player::Update(float dt)
 {
+	if (app->currentScene == LEVEL1)
+	{
 		b2Vec2 pos = { x,y };
 		b2Vec2 stopping = { 0.0f,0.0f };
 
@@ -395,6 +400,7 @@ bool Player::Update(float dt)
 		}
 
 		currentAnimation->Update();
+	}
 
 	return true;
 }
@@ -412,8 +418,11 @@ void Player::SetPlayerSlowMo(bool b)
 // Called each loop iteration
 bool Player::PostUpdate()
 {
+	if (app->currentScene == LEVEL1)
+	{
 		// Drawing player
 		app->render->DrawTexture(texture, METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) - 10, METERS_TO_PIXELS(ColHitbox->body->GetPosition().y) - 17, &currentAnimation->GetCurrentFrame());
+	}
 
 	return true;
 }

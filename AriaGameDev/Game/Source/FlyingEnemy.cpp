@@ -130,6 +130,8 @@ bool FlyingEnemy::Awake()
 // Called before the first frame
 bool FlyingEnemy::Start()
 {
+	if (app->currentScene == LEVEL1)
+	{
 		//textures
 		texture = app->tex->Load("Assets/sprites/Enemies.png");
 
@@ -159,12 +161,15 @@ bool FlyingEnemy::Start()
 		lifes = 2;
 
 		LOG("Loading Flying Enemy");
+	}
 
 	return true;
 }
 
 bool FlyingEnemy::Update(float dt)
 {
+	if (app->currentScene == LEVEL1)
+	{
 		if (lifes <= 0)
 		{
 			actualState = DEATH;
@@ -461,14 +466,17 @@ bool FlyingEnemy::Update(float dt)
 		}
 
 		currentAnimation->Update();
+	}
 
 	return true;
 }
 
 bool FlyingEnemy::PostUpdate()
 {
+	if (app->currentScene == LEVEL1)
+	{
 		app->render->DrawTexture(texture, positionOfTheObject.x - 5, positionOfTheObject.y, &currentAnimation->GetCurrentFrame());
-
+	}
 	return true;
 }
 

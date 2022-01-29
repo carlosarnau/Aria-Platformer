@@ -339,8 +339,8 @@ bool Scene::Update(float dt)
 			if (app->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 			{
 				app->ChangeScene(MENUSCREEN);
+
 				app->render->camera.x = 0;
-				app->scene->Start();
 				return true;
 			}
 		}
@@ -354,9 +354,7 @@ bool Scene::Update(float dt)
 			{
 				app->ChangeScene(LEVEL1);
 
-				//app->audio->PlayMusic("Assets/audio/music/Menu Music - World Flower.ogg");
 				app->render->camera.x = 0;
-				app->scene->Start();
 				return true;
 			}
 		}
