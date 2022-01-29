@@ -239,7 +239,7 @@ bool Player::Update(float dt)
 	{
 	}
 
-	if ((METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) > (960 / 2)) && (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) < 960 * 1.845))
+	if ((METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) > (960 / 2)) && (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) <= 960 * 2.169))
 	{
 		app->render->camera.x = - 960 / 2 + (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x));
 	}
