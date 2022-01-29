@@ -239,7 +239,14 @@ bool Player::Update(float dt)
 	{
 	}
 
-	app->render->camera.x = METERS_TO_PIXELS(ColHitbox->body->GetPosition().x)-0.5f *app->win->GetWidth();
+	if ((METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) > (960 / 2)) && (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) < 960 * 1.845))
+	{
+		app->render->camera.x = - 960 / 2 + (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x));
+	}
+	else if (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) <= 960)
+	{
+		app->render->camera.x = 0;
+	}
 
 	// X movement on air
 	if (ColHitbox->body->GetLinearVelocity().x < -3)
