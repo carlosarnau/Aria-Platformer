@@ -152,39 +152,40 @@ bool Player::Awake()
 // Load assets
 bool Player::Start()
 {
-	// Textures
-	texture = app->tex->Load("Assets/sprites/GraveRobber.png");
+		// Textures
+		texture = app->tex->Load("Assets/sprites/GraveRobber.png");
 
-	// Player stats
-	startPosX = 70;
-	startPosY = 100;
-	speed = { 1.3,0 };
-	jumpForce = { 0,-2.6f };
+		// Player stats
+		startPosX = 70;
+		startPosY = 100;
+		speed = { 1.3,0 };
+		jumpForce = { 0,-2.6f };
 
-	// Id's :
-	// 0 Nothing
-	// 1 Player
-	// 2 Water
-	// 3 Holes
-	// 4 Win
-	// 5 Flying Enemy
-	// 6 Walking Enemy
+		// Id's :
+		// 0 Nothing
+		// 1 Player
+		// 2 Water
+		// 3 Holes
+		// 4 Win
+		// 5 Flying Enemy
+		// 6 Walking Enemy
 
-	ColHitbox = app->physics->CreateCircle(startPosX, startPosY,15);
-	ColHitbox->id = 1;
-	ColHitbox->listener = app->player;
-	
-	int x_ = (int)x;
-	int y_ = (int)y;
-	ColHitbox->GetPosition(x_, y_);
+		ColHitbox = app->physics->CreateCircle(startPosX, startPosY, 15);
+		ColHitbox->id = 1;
+		ColHitbox->listener = app->player;
 
-	lifes = 4;
-	isAlive = true;
-	deathAnimAllowed = false;
-	win = false;
-	slowMoHability = false;
+		int x_ = (int)x;
+		int y_ = (int)y;
+		ColHitbox->GetPosition(x_, y_);
 
-	LOG("Loading player");
+		lifes = 4;
+		isAlive = true;
+		deathAnimAllowed = false;
+		win = false;
+		slowMoHability = false;
+
+		LOG("Loading player");
+
 	return true;
 }
 
@@ -199,201 +200,201 @@ bool Player::CleanUp()
 // Update: draw background
 bool Player::Update(float dt)
 {
-	b2Vec2 pos = { x,y };
-	b2Vec2 stopping = {0.0f,0.0f};
+		b2Vec2 pos = { x,y };
+		b2Vec2 stopping = { 0.0f,0.0f };
 
-	bool goLeft = (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT);
-	bool goRight = (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT);
-	bool qHability = (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN);
-	
-	// X movement on ground
-	if (lifes <= 0)
-	{
-		isAlive = false;
-	}
-	if (isAlive != false && win == false)
-	{
-		if (goRight == true)
+		bool goLeft = (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT);
+		bool goRight = (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT);
+		bool qHability = (app->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN);
+
+		// X movement on ground
+		if (lifes <= 0)
 		{
-			if (ColHitbox->body->GetLinearVelocity().x < 5.f)
-				ColHitbox->body->ApplyLinearImpulse(speed, ColHitbox->body->GetPosition(), true);
+			isAlive = false;
 		}
-		if (goLeft == true)
+		if (isAlive != false && win == false)
 		{
-			if (ColHitbox->body->GetLinearVelocity().x > -5.f)
-				ColHitbox->body->ApplyLinearImpulse(-speed, ColHitbox->body->GetPosition(), true);
-		}
-		if (qHability == true)
-		{
-			if (slowMoHability == true)
+			if (goRight == true)
 			{
-				slowMoHability = false;				
+				if (ColHitbox->body->GetLinearVelocity().x < 5.f)
+					ColHitbox->body->ApplyLinearImpulse(speed, ColHitbox->body->GetPosition(), true);
 			}
-			else
+			if (goLeft == true)
 			{
-				slowMoHability = true;				
+				if (ColHitbox->body->GetLinearVelocity().x > -5.f)
+					ColHitbox->body->ApplyLinearImpulse(-speed, ColHitbox->body->GetPosition(), true);
 			}
-		}
-	}	
-	else
-	{
-	}
-
-	if ((METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) > (960 / 2)) && (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) <= 960 * 2.169))
-	{
-		app->render->camera.x = - 960 / 2 + (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x));
-	}
-	else if (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) <= 960)
-	{
-		app->render->camera.x = 0;
-	}
-
-	// X movement on air
-	if (ColHitbox->body->GetLinearVelocity().x < -3)
-	{
-		stopping = { speed.x * 0.2f,0 };
-
-		ColHitbox->body->ApplyLinearImpulse(stopping, ColHitbox->body->GetPosition(), true);
-	}
-	
-	if (ColHitbox->body->GetLinearVelocity().x > 3 )
-	{
-		stopping = { speed.x * 0.2f,0 };
-
-		ColHitbox->body->ApplyLinearImpulse(-stopping, ColHitbox->body->GetPosition(), true);
-	}
-		
-	b2Body* ground;
-
-	if (ColHitbox->body->GetContactList() != nullptr)
-	{
-		ground = ColHitbox->body->GetContactList()->contact->GetFixtureA()->GetBody();
-
-		if (ground != nullptr)
-		{
-			b2Vec2 xVel = { 0,ColHitbox->body->GetLinearVelocity().y };
-			if (!goLeft && !goRight) ColHitbox->body->SetLinearVelocity(xVel);
-
-			if (isAlive != false && win == false)
+			if (qHability == true)
 			{
-				if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+				if (slowMoHability == true)
 				{
-					b2Vec2 yVel = { ColHitbox->body->GetLinearVelocity().y,0 };
-					ColHitbox->body->SetLinearVelocity(yVel);
-					ColHitbox->body->ApplyLinearImpulse(jumpForce, ColHitbox->body->GetPosition(), true);
-					ColHitbox->body->SetLinearDamping(0);
+					slowMoHability = false;
+				}
+				else
+				{
+					slowMoHability = true;
 				}
 			}
 		}
-	}
-
-	if (isAlive == true)
-	{
-		if (ColHitbox->body->GetLinearVelocity().x < 0)
+		else
 		{
-			direction = 3;
 		}
-		else if (ColHitbox->body->GetLinearVelocity().x > 0)
+
+		if ((METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) > (960 / 2)) && (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) <= 960 * 2.169))
 		{
-			direction = 2;
+			app->render->camera.x = -960 / 2 + (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x));
+		}
+		else if (METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) <= 960)
+		{
+			app->render->camera.x = 0;
+		}
+
+		// X movement on air
+		if (ColHitbox->body->GetLinearVelocity().x < -3)
+		{
+			stopping = { speed.x * 0.2f,0 };
+
+			ColHitbox->body->ApplyLinearImpulse(stopping, ColHitbox->body->GetPosition(), true);
+		}
+
+		if (ColHitbox->body->GetLinearVelocity().x > 3)
+		{
+			stopping = { speed.x * 0.2f,0 };
+
+			ColHitbox->body->ApplyLinearImpulse(-stopping, ColHitbox->body->GetPosition(), true);
+		}
+
+		b2Body* ground;
+
+		if (ColHitbox->body->GetContactList() != nullptr)
+		{
+			ground = ColHitbox->body->GetContactList()->contact->GetFixtureA()->GetBody();
+
+			if (ground != nullptr)
+			{
+				b2Vec2 xVel = { 0,ColHitbox->body->GetLinearVelocity().y };
+				if (!goLeft && !goRight) ColHitbox->body->SetLinearVelocity(xVel);
+
+				if (isAlive != false && win == false)
+				{
+					if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+					{
+						b2Vec2 yVel = { ColHitbox->body->GetLinearVelocity().y,0 };
+						ColHitbox->body->SetLinearVelocity(yVel);
+						ColHitbox->body->ApplyLinearImpulse(jumpForce, ColHitbox->body->GetPosition(), true);
+						ColHitbox->body->SetLinearDamping(0);
+					}
+				}
+			}
+		}
+
+		if (isAlive == true)
+		{
+			if (ColHitbox->body->GetLinearVelocity().x < 0)
+			{
+				direction = 3;
+			}
+			else if (ColHitbox->body->GetLinearVelocity().x > 0)
+			{
+				direction = 2;
+			}
+			else if (direction == 6)
+			{
+				direction = 0;
+			}
+			else if (direction == 7)
+			{
+				direction = 1;
+			}
+			else if ((ColHitbox->body->GetLinearVelocity().y != 0))
+			{
+				if (direction == 0) {
+					direction = 4;
+				}
+				if (direction == 1) {
+					direction = 5;
+				}
+				if (direction == 2) {
+					direction = 4;
+				}
+				if (direction == 3) {
+					direction = 5;
+				}
+			}
+			else if ((ColHitbox->body->GetLinearVelocity().x == 0) && (ColHitbox->body->GetLinearVelocity().y == 0))
+			{
+				if (direction == 2) {
+					direction = 0;
+				}
+				if (direction == 3) {
+					direction = 1;
+				}
+				if (direction == 4) {
+					direction = 0;
+				}
+				if (direction == 5) {
+					direction = 1;
+				}
+			}
+		}
+		else
+		{
+			if (deathAnimAllowed == true)
+			{
+				if (direction == 0) {
+					direction = 6;
+				}
+				if (direction == 1) {
+					direction = 7;
+				}
+				if (direction == 2) {
+					direction = 6;
+				}
+				if (direction == 3) {
+					direction = 7;
+				}
+				if (direction == 4) {
+					direction = 6;
+				}
+				if (direction == 5) {
+					direction = 7;
+				}
+			}
+		}
+		if (direction == 0)
+		{
+			currentAnimation = &rightIdleAnim;
+		}
+		else if (direction == 1)
+		{
+			currentAnimation = &leftIdleAnim;
+		}
+		else if (direction == 2)
+		{
+			currentAnimation = &runningRigthAnim;
+		}
+		else if (direction == 3)
+		{
+			currentAnimation = &runningLeftAnim;
+		}
+		else if (direction == 4)
+		{
+			currentAnimation = &jumpingRigthAnim;
+		}
+		else if (direction == 5)
+		{
+			currentAnimation = &jumpingLeftAnim;
 		}
 		else if (direction == 6)
 		{
-			direction = 0;
+			currentAnimation = &deathFromRightAnim;
 		}
 		else if (direction == 7)
 		{
-			direction = 1;
+			currentAnimation = &deathFromLeftAnim;
 		}
-		else if ((ColHitbox->body->GetLinearVelocity().y != 0))
-		{
-			if (direction == 0) {
-				direction = 4;
-			}
-			if (direction == 1) {
-				direction = 5;
-			}
-			if (direction == 2) {
-				direction = 4;
-			}
-			if (direction == 3) {
-				direction = 5;
-			}
-		}
-		else if ((ColHitbox->body->GetLinearVelocity().x == 0) && (ColHitbox->body->GetLinearVelocity().y == 0))
-		{
-			if (direction == 2) {
-				direction = 0;
-			}
-			if (direction == 3) {
-				direction = 1;
-			}
-			if (direction == 4) {
-				direction = 0;
-			}
-			if (direction == 5) {
-				direction = 1;
-			}
-		}
-	}
-	else
-	{
-		if (deathAnimAllowed == true)
-		{
-			if (direction == 0) {
-				direction = 6;
-			}
-			if (direction == 1) {
-				direction = 7;
-			}
-			if (direction == 2) {
-				direction = 6;
-			}
-			if (direction == 3) {
-				direction = 7;
-			}
-			if (direction == 4) {
-				direction = 6;
-			}
-			if (direction == 5) {
-				direction = 7;
-			}
-		}
-	}
-	if (direction == 0)
-	{
-		currentAnimation = &rightIdleAnim;
-	}
-	else if (direction == 1)
-	{
-		currentAnimation = &leftIdleAnim;
-	}
-	else if (direction == 2)
-	{
-		currentAnimation = &runningRigthAnim;
-	}
-	else if (direction == 3)
-	{
-		currentAnimation = &runningLeftAnim;
-	}
-	else if (direction == 4)
-	{
-		currentAnimation = &jumpingRigthAnim;
-	}
-	else if (direction == 5)
-	{
-		currentAnimation = &jumpingLeftAnim;
-	}
-	else if (direction == 6)
-	{
-		currentAnimation = &deathFromRightAnim;
-	}
-	else if (direction == 7)
-	{
-		currentAnimation = &deathFromLeftAnim;
-	}
 
-	currentAnimation->Update();
+		currentAnimation->Update();
 
 	return true;
 }
@@ -411,8 +412,8 @@ void Player::SetPlayerSlowMo(bool b)
 // Called each loop iteration
 bool Player::PostUpdate()
 {
-	// Drawing player
-	app->render->DrawTexture(texture, METERS_TO_PIXELS(ColHitbox->body->GetPosition().x)-10, METERS_TO_PIXELS(ColHitbox->body->GetPosition().y)-17, &currentAnimation->GetCurrentFrame());
+		// Drawing player
+		app->render->DrawTexture(texture, METERS_TO_PIXELS(ColHitbox->body->GetPosition().x) - 10, METERS_TO_PIXELS(ColHitbox->body->GetPosition().y) - 17, &currentAnimation->GetCurrentFrame());
 
 	return true;
 }
@@ -439,154 +440,154 @@ void Player::SetPlayerWin(bool b)
 
 bool Player::LoadState(pugi::xml_node& data)
 {
-	LOG("loading player ");
-	startPosX = data.child("startPos").attribute("x").as_float(0);
-	startPosY = data.child("startPos").attribute("y").as_float(0);
-	lifes = data.child("lifes").attribute("value").as_int();
-	isAlive = data.child("isAlive").attribute("value").as_bool();
-	deathAnimAllowed = data.child("deathAnimation").attribute("value").as_bool();
+		LOG("loading player ");
+		startPosX = data.child("startPos").attribute("x").as_float(0);
+		startPosY = data.child("startPos").attribute("y").as_float(0);
+		lifes = data.child("lifes").attribute("value").as_int();
+		isAlive = data.child("isAlive").attribute("value").as_bool();
+		deathAnimAllowed = data.child("deathAnimation").attribute("value").as_bool();
 
-	b2Vec2 v = { PIXEL_TO_METERS( startPosX), PIXEL_TO_METERS(startPosY )};
-	ColHitbox->body->SetTransform(v, 0);
+		b2Vec2 v = { PIXEL_TO_METERS(startPosX), PIXEL_TO_METERS(startPosY) };
+		ColHitbox->body->SetTransform(v, 0);
 
 	return true;
 }
 
 bool Player::SaveState(pugi::xml_node& data) const
 {
-	LOG("saving player ");
-	data.child("startPos").attribute("x").set_value(METERS_TO_PIXELS(ColHitbox->body->GetPosition().x));
-	data.child("startPos").attribute("y").set_value(METERS_TO_PIXELS(ColHitbox->body->GetPosition().y));
-	data.child("lifes").attribute("value").set_value(lifes);
-	data.child("isAlive").attribute("value").set_value(isAlive);
-	data.child("deathAnimation").attribute("value").set_value(deathAnimAllowed);
+		LOG("saving player ");
+		data.child("startPos").attribute("x").set_value(METERS_TO_PIXELS(ColHitbox->body->GetPosition().x));
+		data.child("startPos").attribute("y").set_value(METERS_TO_PIXELS(ColHitbox->body->GetPosition().y));
+		data.child("lifes").attribute("value").set_value(lifes);
+		data.child("isAlive").attribute("value").set_value(isAlive);
+		data.child("deathAnimation").attribute("value").set_value(deathAnimAllowed);
 
 	return true;
 }
 
 void Player::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	if (bodyB == nullptr)
-	{
-	}
-	else
-	{
-		if ((bodyA->id == 1) && (bodyB->id == 2))
+		if (bodyB == nullptr)
 		{
-			if (app->player->GetPlayerLifes() > 0)
-			{
-				// Fall in water loose one life
-				app->audio->PlayFx(app->scene->water_fx);
-				//app->player->life
-				app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
-
-				bodyA->body->ApplyLinearImpulse({ 0, -3.5f }, app->player->GetColHitbox()->body->GetPosition(), true);
-			}
-			else
-			{
-				//app->player->currentAnimation = &app->player->deathFromLeftAnim;
-				app->player->deathAnimAllowed = true;
-				app->audio->PlayFx(app->scene->pdeath_fx);
-				//app->player->SetPlayerLifes(3);
-			}
 		}
-		else if ((bodyA->id == 1) && (bodyB->id == 3))
+		else
 		{
-			// Fall and loose
-
-			if (app->player->GetPlayerLifes() > 0)
+			if ((bodyA->id == 1) && (bodyB->id == 2))
 			{
-				app->audio->PlayFx(app->scene->fall_fx);
-
-				app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
-
-				bodyA->body->ApplyLinearImpulse({ 0, -5.5f }, app->player->GetColHitbox()->body->GetPosition(), true);
-			}
-			else
-			{
-
-				//app->player->currentAnimation=&app->player->deathFromRightAnim;
-				app->audio->PlayFx(app->scene->pdeath_fx);
-				app->player->deathAnimAllowed = true;
-				//app->player->SetPlayerLifes(3);
-			}
-		}
-		else if ((bodyA->id == 1) && (bodyB->id == 0))
-		{
-			if (app->player->GetPlayerLifes() > 0)
-			{
-			}
-			else
-			{
-				//app->player->currentAnimation=&app->player->deathFromRightAnim;
-				app->player->deathAnimAllowed = true;
-				//app->audio->PlayFx(app->scene->pdeath_fx);
-				//app->player->SetPlayerLifes(3);
-			}
-		}
-		else if ((bodyA->id == 1) && (bodyB->id == 4))
-		{
-			if (app->player->GetPlayerLifes() > 0)
-			{
-				Mix_HaltMusic();
-				app->audio->PlayFx(app->scene->win_fx);
-				app->player->SetPlayerWin(true);
-			}
-			else
-			{
-			}
-		}
-		else if ((bodyA->id == 1) && (bodyB->id == 5))
-		{
-			// Fall and loose
-
-			if (app->player->GetPlayerLifes() > 0)
-			{
-				app->audio->PlayFx(app->scene->hit_fx);
-
-				app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
-
-				if (app->player->GetColHitbox()->body->GetPosition().x > bodyB->body->GetPosition().x)
+				if (app->player->GetPlayerLifes() > 0)
 				{
-					bodyA->body->ApplyLinearImpulse({ 5.0f, 0.0f }, app->player->GetColHitbox()->body->GetPosition(), true);
+					// Fall in water loose one life
+					app->audio->PlayFx(app->scene->water_fx);
+					//app->player->life
+					app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
+
+					bodyA->body->ApplyLinearImpulse({ 0, -3.5f }, app->player->GetColHitbox()->body->GetPosition(), true);
 				}
-
-				if (app->player->GetColHitbox()->body->GetPosition().x < bodyB->body->GetPosition().x)
+				else
 				{
-					bodyA->body->ApplyLinearImpulse({ -5.0f, 0.0f }, app->player->GetColHitbox()->body->GetPosition(), true);
-				}				
-			}
-			else
-			{
-				app->player->deathAnimAllowed = true;
-				app->audio->PlayFx(app->scene->pdeath_fx);
-			}
-		}
-		else if ((bodyA->id == 1) && (bodyB->id == 6))
-		{
-		// Fall and loose
-
-			if (app->player->GetPlayerLifes() > 0)
-			{
-				app->audio->PlayFx(app->scene->hit_fx);
-
-				app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
-
-				if (app->player->GetColHitbox()->body->GetPosition().x > bodyB->body->GetPosition().x)
-				{
-					bodyA->body->ApplyLinearImpulse({ 5.0f, 0.0f }, app->player->GetColHitbox()->body->GetPosition(), true);
-				}
-
-				if (app->player->GetColHitbox()->body->GetPosition().x < bodyB->body->GetPosition().x)
-				{
-					bodyA->body->ApplyLinearImpulse({ -5.0f, 0.0f }, app->player->GetColHitbox()->body->GetPosition(), true);
+					//app->player->currentAnimation = &app->player->deathFromLeftAnim;
+					app->player->deathAnimAllowed = true;
+					app->audio->PlayFx(app->scene->pdeath_fx);
+					//app->player->SetPlayerLifes(3);
 				}
 			}
-			else
+			else if ((bodyA->id == 1) && (bodyB->id == 3))
 			{
-				app->player->deathAnimAllowed = true;
-				app->audio->PlayFx(app->scene->pdeath_fx);
+				// Fall and loose
+
+				if (app->player->GetPlayerLifes() > 0)
+				{
+					app->audio->PlayFx(app->scene->fall_fx);
+
+					app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
+
+					bodyA->body->ApplyLinearImpulse({ 0, -5.5f }, app->player->GetColHitbox()->body->GetPosition(), true);
+				}
+				else
+				{
+
+					//app->player->currentAnimation=&app->player->deathFromRightAnim;
+					app->audio->PlayFx(app->scene->pdeath_fx);
+					app->player->deathAnimAllowed = true;
+					//app->player->SetPlayerLifes(3);
+				}
+			}
+			else if ((bodyA->id == 1) && (bodyB->id == 0))
+			{
+				if (app->player->GetPlayerLifes() > 0)
+				{
+				}
+				else
+				{
+					//app->player->currentAnimation=&app->player->deathFromRightAnim;
+					app->player->deathAnimAllowed = true;
+					//app->audio->PlayFx(app->scene->pdeath_fx);
+					//app->player->SetPlayerLifes(3);
+				}
+			}
+			else if ((bodyA->id == 1) && (bodyB->id == 4))
+			{
+				if (app->player->GetPlayerLifes() > 0)
+				{
+					Mix_HaltMusic();
+					app->audio->PlayFx(app->scene->win_fx);
+					app->player->SetPlayerWin(true);
+				}
+				else
+				{
+				}
+			}
+			else if ((bodyA->id == 1) && (bodyB->id == 5))
+			{
+				// Fall and loose
+
+				if (app->player->GetPlayerLifes() > 0)
+				{
+					app->audio->PlayFx(app->scene->hit_fx);
+
+					app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
+
+					if (app->player->GetColHitbox()->body->GetPosition().x > bodyB->body->GetPosition().x)
+					{
+						bodyA->body->ApplyLinearImpulse({ 5.0f, 0.0f }, app->player->GetColHitbox()->body->GetPosition(), true);
+					}
+
+					if (app->player->GetColHitbox()->body->GetPosition().x < bodyB->body->GetPosition().x)
+					{
+						bodyA->body->ApplyLinearImpulse({ -5.0f, 0.0f }, app->player->GetColHitbox()->body->GetPosition(), true);
+					}
+				}
+				else
+				{
+					app->player->deathAnimAllowed = true;
+					app->audio->PlayFx(app->scene->pdeath_fx);
+				}
+			}
+			else if ((bodyA->id == 1) && (bodyB->id == 6))
+			{
+				// Fall and loose
+
+				if (app->player->GetPlayerLifes() > 0)
+				{
+					app->audio->PlayFx(app->scene->hit_fx);
+
+					app->player->SetPlayerLifes(app->player->GetPlayerLifes() - 1);
+
+					if (app->player->GetColHitbox()->body->GetPosition().x > bodyB->body->GetPosition().x)
+					{
+						bodyA->body->ApplyLinearImpulse({ 5.0f, 0.0f }, app->player->GetColHitbox()->body->GetPosition(), true);
+					}
+
+					if (app->player->GetColHitbox()->body->GetPosition().x < bodyB->body->GetPosition().x)
+					{
+						bodyA->body->ApplyLinearImpulse({ -5.0f, 0.0f }, app->player->GetColHitbox()->body->GetPosition(), true);
+					}
+				}
+				else
+				{
+					app->player->deathAnimAllowed = true;
+					app->audio->PlayFx(app->scene->pdeath_fx);
+				}
 			}
 		}
-	}
 }

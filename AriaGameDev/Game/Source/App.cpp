@@ -133,8 +133,6 @@ bool App::Awake()
 // Called before the first frame
 bool App::Start()
 {
-	PERF_START(ptimer);
-
 	bool ret = true;
 	ListItem<Module*>* item;
 	item = modules.start;
@@ -144,8 +142,6 @@ bool App::Start()
 		ret = item->data->Start();
 		item = item->next;
 	}
-
-	PERF_PEEK(ptimer);
 
 	return ret;
 }
@@ -485,4 +481,11 @@ void App::DisplayFrameRateInfo()
 
 
 	}
+}
+
+void App::ChangeScene(sceneType nextScene)
+{
+	currentScene = nextScene;
+
+	Start();
 }

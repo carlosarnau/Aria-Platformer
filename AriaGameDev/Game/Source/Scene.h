@@ -33,12 +33,6 @@ public:
 	// Called before all Updates
 	bool PostUpdate();
 
-	// Used to pass to the second level
-	bool PassLevelCondition();
-
-	// Win and Loss screens and consequences
-	bool WinLoseCondition();
-
 	// Called before quitting
 	bool CleanUp();
 
@@ -62,12 +56,13 @@ public:
 	SDL_Texture* pathTex;
 
 private:
+	bool titleMenu;
+
+	SDL_Texture* titleScreen;
+	SDL_Texture* menuscreen;
 	SDL_Texture* map;
-
 	SDL_Texture* img;
-
 	SDL_Texture* originTex;
-
 	SDL_Rect end_rect;
 
 	List<PhysBody*> static_chains;
@@ -81,6 +76,8 @@ private:
 	PhysBody* sensor_water02 = nullptr;
 	PhysBody* sensor_water03 = nullptr;
 	PhysBody* sensor_win = nullptr;
+
+	sceneType pScene = MENUSCREEN;
 };
 
 #endif // __SCENE1_H__

@@ -130,72 +130,72 @@ bool WalkingEnemy::Awake()
 // Called before the first frame
 bool WalkingEnemy::Start()
 {
-	// Textures
-	texture = app->tex->Load("Assets/sprites/Enemies.png");
+		// Textures
+		texture = app->tex->Load("Assets/sprites/Enemies.png");
 
-	// Enemy stats
-	startPosX = app->map->MapToWorld(30,6).x;
-	startPosY = app->map->MapToWorld(30, 6).y;
-	speed = { 1.3f,0 };
+		// Enemy stats
+		startPosX = app->map->MapToWorld(30, 6).x;
+		startPosY = app->map->MapToWorld(30, 6).y;
+		speed = { 1.3f,0 };
 
-	// Id's :
-	// 0 Nothing
-	// 1 Player
-	// 2 Water
-	// 3 Holes
-	// 4 Win
-	// 5 Flying Enemy
-	// 6 Walking Enemy
+		// Id's :
+		// 0 Nothing
+		// 1 Player
+		// 2 Water
+		// 3 Holes
+		// 4 Win
+		// 5 Flying Enemy
+		// 6 Walking Enemy
 
-	ColHitbox = app->physics->CreateCircle(startPosX, startPosY, 6);
-	ColHitbox->id = 6;
-	ColHitbox->listener = app->walkingenemy;
+		ColHitbox = app->physics->CreateCircle(startPosX, startPosY, 6);
+		ColHitbox->id = 6;
+		ColHitbox->listener = app->walkingenemy;
 
-	int x_ = (int)x;
-	int y_ = (int)y;
-	ColHitbox->GetPosition(x_, y_);
-	actualStates = WALK;
-	isAlive = true;
-	lifes = 2;
-	canJump = true;
+		int x_ = (int)x;
+		int y_ = (int)y;
+		ColHitbox->GetPosition(x_, y_);
+		actualStates = WALK;
+		isAlive = true;
+		lifes = 2;
+		canJump = true;
 
-	LOG("Loading Flying Enemy");
-
+		LOG("Loading Flying Enemy");
+	
 	return true;
 }
 
 bool WalkingEnemy::Update(float dt)
 {
-	if (lifes <= 0)
-	{
-		actualStates = DIE;
-		isAlive = false;
-	}
-
-	if (isAlive == true)
-	{
-		if (METERS_TO_PIXELS(app->player->GetColHitbox()->body->GetPosition().x) > 832)
+		if (lifes <= 0)
 		{
-			actualStates = ATTACK;
+			actualStates = DIE;
+			isAlive = false;
+		}
 
-			if (app->player->isAlive == false)
+		if (isAlive == true)
+		{
+			if (METERS_TO_PIXELS(app->player->GetColHitbox()->body->GetPosition().x) > 832)
+			{
+				actualStates = ATTACK;
+
+				if (app->player->isAlive == false)
+				{
+					actualStates = WALK;
+				}
+			}
+			else
 			{
 				actualStates = WALK;
 			}
 		}
-		else
+
+		if (app->player->GetPlayerWin() == true)
 		{
 			actualStates = WALK;
 		}
-	}
 
-	if (app->player->GetPlayerWin() == true)
-	{
-		actualStates = WALK;
-	}
-
-	switch (actualStates)
-	{
+		switch (actualStates)
+		{
 		case WALK:
 		{
 			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
@@ -276,16 +276,16 @@ bool WalkingEnemy::Update(float dt)
 			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
 			directionPoint = app->map->WorldToMap(positionOfTheObject.x, positionOfTheObject.y);
 		}break;
-	}
+		}
 
-	// Enemy movement 
-	if (isAlive == true)
-	{
-		switch (actualStates)
+		// Enemy movement 
+		if (isAlive == true)
 		{
+			switch (actualStates)
+			{
 			case WALK:
 			{
-				directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y ); // pixels
+				directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y); // pixels
 				//directionPoint = app->map->MapToWorld(4, 4); // pixels	
 
 				directionPoint = { directionPoint.x + 13, directionPoint.y + 16 };
@@ -360,22 +360,22 @@ bool WalkingEnemy::Update(float dt)
 					}
 				}
 
-				if ((directionPoint.y < positionOfTheObject.y)&& (canJump == true))
+				if ((directionPoint.y < positionOfTheObject.y) && (canJump == true))
 				{
 					ColHitbox->body->ApplyLinearImpulse({ 0.0f,-0.12f }, ColHitbox->body->GetPosition(), true);
 					canJump = false;
-				
+
 				}
-	
+
 			}break;
 			case DIE:
 			{
 			}break;
+			}
 		}
-	}
 
-	switch (actualStates)
-	{
+		switch (actualStates)
+		{
 		case WALK:
 		{
 			statesInt = 0;
@@ -388,83 +388,83 @@ bool WalkingEnemy::Update(float dt)
 		{
 			statesInt = 2;
 		}
-	}
+		}
 
-	if (isAlive == true)
-	{
-		if (ColHitbox->body->GetLinearVelocity().x < 0)
+		if (isAlive == true)
 		{
-			direction = 3;
-		}
-		else if (ColHitbox->body->GetLinearVelocity().x > 0)
-		{
-			direction = 2;
-		}
-		else if ((ColHitbox->body->GetLinearVelocity().x == 0))
-		{
-			if (direction == 2) {
-				direction = 0;
+			if (ColHitbox->body->GetLinearVelocity().x < 0)
+			{
+				direction = 3;
 			}
-			if (direction == 3) {
-				direction = 1;
+			else if (ColHitbox->body->GetLinearVelocity().x > 0)
+			{
+				direction = 2;
 			}
-		}
-	}
-	else
-	{
-		if (deathAnimAllowed == true)
-		{
-			if (direction == 0) {
-				direction = 4;
-			}
-			if (direction == 1) {
-				direction = 5;
-			}
-			if (direction == 2) {
-				direction = 4;
-			}
-			if (direction == 3) {
-				direction = 5;
+			else if ((ColHitbox->body->GetLinearVelocity().x == 0))
+			{
+				if (direction == 2) {
+					direction = 0;
+				}
+				if (direction == 3) {
+					direction = 1;
+				}
 			}
 		}
-	}
+		else
+		{
+			if (deathAnimAllowed == true)
+			{
+				if (direction == 0) {
+					direction = 4;
+				}
+				if (direction == 1) {
+					direction = 5;
+				}
+				if (direction == 2) {
+					direction = 4;
+				}
+				if (direction == 3) {
+					direction = 5;
+				}
+			}
+		}
 
-	if (direction == 0)
-	{
-		currentAnimation = &rightIdleAnim;
-	}
-	else if (direction == 1)
-	{
-		currentAnimation = &leftIdleAnim;
-	}
-	else if (direction == 2)
-	{
-		currentAnimation = &runRigthAnim;
-	}
-	else if (direction == 3)
-	{
-		currentAnimation = &runLeftAnim;
-	}
-	else if (direction == 4)
-	{
-		currentAnimation = &deathFromRightAnim;
-	}
-	else if (direction == 5)
-	{
-		currentAnimation = &deathFromLeftAnim;
-	}
+		if (direction == 0)
+		{
+			currentAnimation = &rightIdleAnim;
+		}
+		else if (direction == 1)
+		{
+			currentAnimation = &leftIdleAnim;
+		}
+		else if (direction == 2)
+		{
+			currentAnimation = &runRigthAnim;
+		}
+		else if (direction == 3)
+		{
+			currentAnimation = &runLeftAnim;
+		}
+		else if (direction == 4)
+		{
+			currentAnimation = &deathFromRightAnim;
+		}
+		else if (direction == 5)
+		{
+			currentAnimation = &deathFromLeftAnim;
+		}
 
-	currentAnimation->Update();
+		currentAnimation->Update();
 
-	LOG("%i", lifes);
+		LOG("%i", lifes);
+	
 
 	return true;
 }
 
 bool WalkingEnemy::PostUpdate()
 {
-	app->render->DrawTexture(texture, positionOfTheObject.x - 5, positionOfTheObject.y, &currentAnimation->GetCurrentFrame());
-
+		app->render->DrawTexture(texture, positionOfTheObject.x - 5, positionOfTheObject.y, &currentAnimation->GetCurrentFrame());
 	return true;
 }
 
@@ -492,122 +492,122 @@ void WalkingEnemy::SetEnemyState(WALKING_ENEMY_STATE state)
 
 bool WalkingEnemy::LoadState(pugi::xml_node& data)
 {
-	b2Vec2 v = { PIXEL_TO_METERS(data.child("Pos").attribute("x").as_float()), PIXEL_TO_METERS(data.child("Pos").attribute("y").as_float()) };
-	
-	 lifes = data.child("lifes").attribute("value").as_int();
-	 isAlive = data.child("isAlive").attribute("value").as_bool();
-	 deathAnimAllowed = data.child("deathAnimation").attribute("value").as_bool();
-	 statesInt = data.child("deathAnimation").attribute("value").as_int();
+		b2Vec2 v = { PIXEL_TO_METERS(data.child("Pos").attribute("x").as_float()), PIXEL_TO_METERS(data.child("Pos").attribute("y").as_float()) };
 
-	 switch (statesInt)
-	 {
+		lifes = data.child("lifes").attribute("value").as_int();
+		isAlive = data.child("isAlive").attribute("value").as_bool();
+		deathAnimAllowed = data.child("deathAnimation").attribute("value").as_bool();
+		statesInt = data.child("deathAnimation").attribute("value").as_int();
+
+		switch (statesInt)
+		{
 		case 0:
 		{
 			actualStates = WALK;
 		}break;
 		case 1:
 		{
-			actualStates =ATTACK;
+			actualStates = ATTACK;
 		}break;
 		case 2:
 		{
 			actualStates = DIE;
 		}
-	}
-	
-	ColHitbox->body->SetTransform(v, 0);
+		}
+
+		ColHitbox->body->SetTransform(v, 0);
 
 	return true;
 }
 
 bool WalkingEnemy::SaveState(pugi::xml_node& data) const
 {
-	LOG("saving enemy ");
+		LOG("saving enemy ");
 
-	data.child("Pos").attribute("x").set_value(positionOfTheObject.x);
-	data.child("Pos").attribute("y").set_value(positionOfTheObject.y);
-	data.child("lifes").attribute("value").set_value(lifes);
-	data.child("isAlive").attribute("value").set_value(isAlive);
-	data.child("deathAnimation").attribute("value").set_value(deathAnimAllowed);
-	data.child("state").attribute("value").set_value(statesInt);
+		data.child("Pos").attribute("x").set_value(positionOfTheObject.x);
+		data.child("Pos").attribute("y").set_value(positionOfTheObject.y);
+		data.child("lifes").attribute("value").set_value(lifes);
+		data.child("isAlive").attribute("value").set_value(isAlive);
+		data.child("deathAnimation").attribute("value").set_value(deathAnimAllowed);
+		data.child("state").attribute("value").set_value(statesInt);
 
 	return true;
 }
 
 void WalkingEnemy::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	// Id's :
-	// 0 Nothing
-	// 1 Player
-	// 2 Water
-	// 3 Holes
-	// 4 Win
-	// 5 Flying Enemy
-	// 6 Walking Enemy
+		// Id's :
+		// 0 Nothing
+		// 1 Player
+		// 2 Water
+		// 3 Holes
+		// 4 Win
+		// 5 Flying Enemy
+		// 6 Walking Enemy
 
-	if (bodyB == nullptr)
-	{
-	}
-	else
-	{
-		if ((bodyA->id == 6) && (bodyB->id == 0))
+		if (bodyB == nullptr)
 		{
-			canJump = true;
 		}
-
-		if ((bodyA->id == 6) && (bodyB->id == 2))
+		else
 		{
-
-			if (lifes > 0)
+			if ((bodyA->id == 6) && (bodyB->id == 0))
 			{
-				//app->audio->PlayFx(app->scene->water_fx);
-				
-				lifes--;
-
-				bodyA->body->ApplyLinearImpulse({ 0, -0.5f }, ColHitbox->body->GetPosition(), true);
-				app->audio->PlayFx(app->scene->ehit_fx);
+				canJump = true;
 			}
-			else
+
+			if ((bodyA->id == 6) && (bodyB->id == 2))
 			{
-				deathAnimAllowed = true;
-				app->audio->PlayFx(app->scene->edeath_fx);
+
+				if (lifes > 0)
+				{
+					//app->audio->PlayFx(app->scene->water_fx);
+
+					lifes--;
+
+					bodyA->body->ApplyLinearImpulse({ 0, -0.5f }, ColHitbox->body->GetPosition(), true);
+					app->audio->PlayFx(app->scene->ehit_fx);
+				}
+				else
+				{
+					deathAnimAllowed = true;
+					app->audio->PlayFx(app->scene->edeath_fx);
+				}
+			}
+
+			if ((bodyA->id == 6) && (bodyB->id == 3))
+			{
+				if (lifes > 0)
+				{
+					//app->audio->PlayFx(app->scene->fall_fx);
+
+					lifes--;
+
+					bodyA->body->ApplyLinearImpulse({ 0, -0.5f }, ColHitbox->body->GetPosition(), true);
+					app->audio->PlayFx(app->scene->ehit_fx);
+				}
+				else
+				{
+					deathAnimAllowed = true;
+					app->audio->PlayFx(app->scene->edeath_fx);
+				}
+			}
+
+			if ((bodyA->id == 6) && (bodyB->id == 7))
+			{
+				if (lifes > 0)
+				{
+					//app->audio->PlayFx(app->scene->fall_fx);
+
+					lifes--;
+
+					//bodyA->body->ApplyLinearImpulse({ 0, -0.5f }, ColHitbox->body->GetPosition(), true);
+					app->audio->PlayFx(app->scene->ehit_fx);
+				}
+				else
+				{
+					deathAnimAllowed = true;
+					app->audio->PlayFx(app->scene->edeath_fx);
+				}
 			}
 		}
-
-		if ((bodyA->id == 6) && (bodyB->id == 3))
-		{
-			if (lifes > 0)
-			{
-				//app->audio->PlayFx(app->scene->fall_fx);
-				
-				lifes--;
-
-				bodyA->body->ApplyLinearImpulse({ 0, -0.5f }, ColHitbox->body->GetPosition(), true);
-				app->audio->PlayFx(app->scene->ehit_fx);
-			}
-			else
-			{
-				deathAnimAllowed = true;
-				app->audio->PlayFx(app->scene->edeath_fx);
-			}
-		}
-
-		if ((bodyA->id == 6) && (bodyB->id == 7))
-		{
-			if (lifes > 0)
-			{
-				//app->audio->PlayFx(app->scene->fall_fx);
-
-				lifes--;
-
-				//bodyA->body->ApplyLinearImpulse({ 0, -0.5f }, ColHitbox->body->GetPosition(), true);
-				app->audio->PlayFx(app->scene->ehit_fx);
-			}
-			else
-			{
-				deathAnimAllowed = true;
-				app->audio->PlayFx(app->scene->edeath_fx);
-			}
-		}
-	}
 }

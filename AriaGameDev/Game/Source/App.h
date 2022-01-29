@@ -28,6 +28,15 @@ class PathFinding;
 //class Timer;
 //class PerfTimer;
 
+enum sceneType
+{
+	TITLESCREEN,
+	MENUSCREEN,
+	LEVEL1,
+	SETTINGS,
+	CREDITS,
+};
+
 class App
 {
 public:
@@ -61,6 +70,8 @@ public:
     // L02: DONE 1: Create methods to request Load / Save
 	void LoadGameRequest();
 	void SaveGameRequest() const;
+
+	void ChangeScene(sceneType nextScene);
 
 	float GetDeltaTime()
 	{
@@ -125,6 +136,7 @@ public:
 	FlyingEnemy* flyingenemy;
 	WalkingEnemy* walkingenemy;
 
+	sceneType currentScene = TITLESCREEN;
 private:
 	int argc;
 	char** args;

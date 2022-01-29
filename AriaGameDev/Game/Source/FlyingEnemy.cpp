@@ -130,78 +130,78 @@ bool FlyingEnemy::Awake()
 // Called before the first frame
 bool FlyingEnemy::Start()
 {
-	//textures
-	texture = app->tex->Load("Assets/sprites/Enemies.png");
+		//textures
+		texture = app->tex->Load("Assets/sprites/Enemies.png");
 
-	//enemy stats
-	startPosX = 300;
-	startPosY = 150;
-	speed = { 1.3f,0 };
-	
-	// Id's :
-	// 0 Nothing
-	// 1 Player
-	// 2 Water
-	// 3 Holes
-	// 4 Win
-	// 5 Flying Enemy
-	// 6 Walking Enemy
+		//enemy stats
+		startPosX = 300;
+		startPosY = 150;
+		speed = { 1.3f,0 };
 
-	ColHitbox = app->physics->CreateCircle(startPosX, startPosY, 6);
-	ColHitbox->id = 5;
-	ColHitbox->listener = app->flyingenemy;
+		// Id's :
+		// 0 Nothing
+		// 1 Player
+		// 2 Water
+		// 3 Holes
+		// 4 Win
+		// 5 Flying Enemy
+		// 6 Walking Enemy
 
-	int x_ = (int)x;
-	int y_ = (int)y;
-	ColHitbox->GetPosition(x_, y_);
-	actualState = PATROLLING;
-	isAlive = true; 
-	lifes = 2; 
+		ColHitbox = app->physics->CreateCircle(startPosX, startPosY, 6);
+		ColHitbox->id = 5;
+		ColHitbox->listener = app->flyingenemy;
 
-	LOG("Loading Flying Enemy");
+		int x_ = (int)x;
+		int y_ = (int)y;
+		ColHitbox->GetPosition(x_, y_);
+		actualState = PATROLLING;
+		isAlive = true;
+		lifes = 2;
+
+		LOG("Loading Flying Enemy");
 
 	return true;
 }
 
 bool FlyingEnemy::Update(float dt)
 {
-	if (lifes <= 0)
-	{
-		actualState = DEATH;
-		isAlive = false;
-	}
-
-	if (isAlive == true)
-	{
-		
-		if (METERS_TO_PIXELS(app->player->GetColHitbox()->body->GetPosition().x)  > 832)
+		if (lifes <= 0)
 		{
-			actualState = CHASING_PLAYER;
+			actualState = DEATH;
+			isAlive = false;
+		}
 
-			if (app->player->isAlive == false)
+		if (isAlive == true)
+		{
+
+			if (METERS_TO_PIXELS(app->player->GetColHitbox()->body->GetPosition().x) > 832)
+			{
+				actualState = CHASING_PLAYER;
+
+				if (app->player->isAlive == false)
+				{
+					actualState = PATROLLING;
+				}
+			}
+			else
 			{
 				actualState = PATROLLING;
 			}
 		}
-		else
+
+		if (app->player->GetPlayerWin() == true)
 		{
 			actualState = PATROLLING;
 		}
-	}
 
-	if (app->player->GetPlayerWin() == true)
-	{
-		actualState = PATROLLING;
-	}
-	
-	switch (actualState)
-	{
+		switch (actualState)
+		{
 		case CHASING_PLAYER:
 		{
 			// Chase the player
-	
+
 			// Make the pathfinding
-	
+
 			// Advance one tile
 
 			iPoint playerPos;
@@ -241,8 +241,8 @@ bool FlyingEnemy::Update(float dt)
 		{
 			// Maintain the position
 			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
-			directionPoint = app->map->WorldToMap( positionOfTheObject.x, positionOfTheObject.y );
-		
+			directionPoint = app->map->WorldToMap(positionOfTheObject.x, positionOfTheObject.y);
+
 			iPoint playerPos;
 
 			ColHitbox->GetPosition(positionOfTheObject.x, positionOfTheObject.y);
@@ -250,14 +250,14 @@ bool FlyingEnemy::Update(float dt)
 
 			playerPos = app->map->WorldToMap(playerPos.x + 15, playerPos.y + 15);
 
-			app->pathfinding->CreatePath(directionPoint, {27,11});
+			app->pathfinding->CreatePath(directionPoint, { 27,11 });
 
 			iPoint NextPos;
 
 			const DynArray<iPoint>* lastPath = app->pathfinding->GetLastPath();
 
 			if (lastPath->Count() > 1)
-			{	
+			{
 				iPoint path(lastPath->At(1)->x, lastPath->At(1)->y);
 				NextPos = path;
 			}
@@ -284,13 +284,13 @@ bool FlyingEnemy::Update(float dt)
 			deathAnimAllowed = true;
 			ColHitbox->id = 0;
 		}break;
-	}
+		}
 
-	// Enemy movement 
-	if (isAlive == true)
-	{
-		switch (actualState)
+		// Enemy movement 
+		if (isAlive == true)
 		{
+			switch (actualState)
+			{
 			case CHASING_PLAYER:
 			{
 				// Chase the player
@@ -299,7 +299,7 @@ bool FlyingEnemy::Update(float dt)
 
 				// Advance one tile
 
-				directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y -1); // Pixels
+				directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y - 1); // Pixels
 				//directionPoint = app->map->MapToWorld(4, 4); // pixels	
 
 				directionPoint = { directionPoint.x + 13, directionPoint.y + 16 };
@@ -335,7 +335,7 @@ bool FlyingEnemy::Update(float dt)
 			{
 				// Maintain the position
 
-				directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y-1); // Pixels
+				directionPoint = app->map->MapToWorld(directionPoint.x, directionPoint.y - 1); // Pixels
 				//directionPoint = app->map->MapToWorld(4, 4); // pixels	
 
 				directionPoint = { directionPoint.x + 13, directionPoint.y + 16 };
@@ -377,11 +377,11 @@ bool FlyingEnemy::Update(float dt)
 			case DEATH:
 			{
 			}break;
-		}		
-	}	
+			}
+		}
 
-	switch (actualState)
-	{
+		switch (actualState)
+		{
 		case PATROLLING:
 		{
 			statesInt = 0;
@@ -394,80 +394,80 @@ bool FlyingEnemy::Update(float dt)
 		{
 			statesInt = 2;
 		}
-	}
+		}
 
-	if (isAlive == true)
-	{
-		if (ColHitbox->body->GetLinearVelocity().x < 0)
+		if (isAlive == true)
 		{
-			direction = 2;
-		}
-		else if (ColHitbox->body->GetLinearVelocity().x > 0)
-		{
-			direction = 3;
-		}
-		else if ((ColHitbox->body->GetLinearVelocity().x == 0))
-		{
-			if (direction == 2) {
-				direction = 0;
+			if (ColHitbox->body->GetLinearVelocity().x < 0)
+			{
+				direction = 2;
 			}
-			if (direction == 3) {
-				direction = 1;
+			else if (ColHitbox->body->GetLinearVelocity().x > 0)
+			{
+				direction = 3;
 			}
-		}
-	}
-	else
-	{
-		if (deathAnimAllowed == true)
-		{
-			if (direction == 0) {
-				direction = 4;
-			}
-			if (direction == 1) {
-				direction = 5;
-			}
-			if (direction == 2) {
-				direction = 4;
-			}
-			if (direction == 3) {
-				direction = 5;
+			else if ((ColHitbox->body->GetLinearVelocity().x == 0))
+			{
+				if (direction == 2) {
+					direction = 0;
+				}
+				if (direction == 3) {
+					direction = 1;
+				}
 			}
 		}
-	}
+		else
+		{
+			if (deathAnimAllowed == true)
+			{
+				if (direction == 0) {
+					direction = 4;
+				}
+				if (direction == 1) {
+					direction = 5;
+				}
+				if (direction == 2) {
+					direction = 4;
+				}
+				if (direction == 3) {
+					direction = 5;
+				}
+			}
+		}
 
-	if (direction == 0)
-	{
-		currentAnimation = &rightIdleAnim;
-	}
-	else if (direction == 1)
-	{
-		currentAnimation = &leftIdleAnim;
-	}
-	else if (direction == 2)
-	{
-		currentAnimation = &flyingRigthAnim;
-	}
-	else if (direction == 3)
-	{
-		currentAnimation = &flyingLeftAnim;
-	}
-	else if (direction == 4)
-	{
-		currentAnimation = &deathFromRightAnim;
-	}
-	else if (direction == 5)
-	{
-		currentAnimation = &deathFromLeftAnim;
-	}
+		if (direction == 0)
+		{
+			currentAnimation = &rightIdleAnim;
+		}
+		else if (direction == 1)
+		{
+			currentAnimation = &leftIdleAnim;
+		}
+		else if (direction == 2)
+		{
+			currentAnimation = &flyingRigthAnim;
+		}
+		else if (direction == 3)
+		{
+			currentAnimation = &flyingLeftAnim;
+		}
+		else if (direction == 4)
+		{
+			currentAnimation = &deathFromRightAnim;
+		}
+		else if (direction == 5)
+		{
+			currentAnimation = &deathFromLeftAnim;
+		}
 
-	currentAnimation->Update();
+		currentAnimation->Update();
 
 	return true;
 }
 
 bool FlyingEnemy::PostUpdate()
 {
-	app->render->DrawTexture(texture, positionOfTheObject.x - 5, positionOfTheObject.y, &currentAnimation->GetCurrentFrame());
+		app->render->DrawTexture(texture, positionOfTheObject.x - 5, positionOfTheObject.y, &currentAnimation->GetCurrentFrame());
 
 	return true;
 }
@@ -496,15 +496,15 @@ void FlyingEnemy::SetEnemyState(FLYING_ENEMY_STATE state)
 
 bool FlyingEnemy::LoadState(pugi::xml_node& data)
 {
-	b2Vec2 v = { PIXEL_TO_METERS(data.child("Pos").attribute("x").as_float()), PIXEL_TO_METERS(data.child("Pos").attribute("y").as_float()) };
+		b2Vec2 v = { PIXEL_TO_METERS(data.child("Pos").attribute("x").as_float()), PIXEL_TO_METERS(data.child("Pos").attribute("y").as_float()) };
 
-	lifes = data.child("lifes").attribute("value").as_int();
-	isAlive = data.child("isAlive").attribute("value").as_bool();
-	deathAnimAllowed = data.child("deathAnimation").attribute("value").as_bool();
-	statesInt = data.child("deathAnimation").attribute("value").as_int();
+		lifes = data.child("lifes").attribute("value").as_int();
+		isAlive = data.child("isAlive").attribute("value").as_bool();
+		deathAnimAllowed = data.child("deathAnimation").attribute("value").as_bool();
+		statesInt = data.child("deathAnimation").attribute("value").as_int();
 
-	switch (statesInt)
-	{
+		switch (statesInt)
+		{
 		case 0:
 		{
 			actualState = PATROLLING;
@@ -517,52 +517,52 @@ bool FlyingEnemy::LoadState(pugi::xml_node& data)
 		{
 			actualState = DEATH;
 		}
-	}
+		}
 
-	ColHitbox->body->SetTransform(v, 0);
+		ColHitbox->body->SetTransform(v, 0);
 
 	return true;
 }
 
 bool FlyingEnemy::SaveState(pugi::xml_node& data) const
 {
-	LOG("saving enemy ");
+		LOG("saving enemy ");
 
-	data.child("Pos").attribute("x").set_value(positionOfTheObject.x);
-	data.child("Pos").attribute("y").set_value(positionOfTheObject.y);
-	data.child("lifes").attribute("value").set_value(lifes);
-	data.child("isAlive").attribute("value").set_value(isAlive);
-	data.child("deathAnimation").attribute("value").set_value(deathAnimAllowed);
-	data.child("state").attribute("value").set_value(statesInt);
+		data.child("Pos").attribute("x").set_value(positionOfTheObject.x);
+		data.child("Pos").attribute("y").set_value(positionOfTheObject.y);
+		data.child("lifes").attribute("value").set_value(lifes);
+		data.child("isAlive").attribute("value").set_value(isAlive);
+		data.child("deathAnimation").attribute("value").set_value(deathAnimAllowed);
+		data.child("state").attribute("value").set_value(statesInt);
 
 	return true;
 }
 
 void FlyingEnemy::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	if (bodyB == nullptr)
-	{
-
-	}
-	else
-	{
-		if ((bodyA->id == 5) && (bodyB->id == 7))
+		if (bodyB == nullptr)
 		{
-		  // Is hitted by the shield
 
-			if (lifes > 0)
+		}
+		else
+		{
+			if ((bodyA->id == 5) && (bodyB->id == 7))
 			{
-				//app->audio->PlayFx(app->scene->fall_fx);
+				// Is hitted by the shield
 
-				lifes--;
+				if (lifes > 0)
+				{
+					//app->audio->PlayFx(app->scene->fall_fx);
 
-				//bodyA->body->ApplyLinearImpulse({ 0, -0.5f }, ColHitbox->body->GetPosition(), true);
-				app->audio->PlayFx(app->scene->ehit_fx);
-			}
-			else
-			{
-				app->audio->PlayFx(app->scene->edeath_fx);
+					lifes--;
+
+					//bodyA->body->ApplyLinearImpulse({ 0, -0.5f }, ColHitbox->body->GetPosition(), true);
+					app->audio->PlayFx(app->scene->ehit_fx);
+				}
+				else
+				{
+					app->audio->PlayFx(app->scene->edeath_fx);
+				}
 			}
 		}
-	}
 }

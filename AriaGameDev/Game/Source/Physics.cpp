@@ -397,7 +397,6 @@ bool Physics::CleanUp()
 	return true;
 }
 
-
 // Physbody
 void PhysBody::GetPosition(int& x, int& y) const
 {
