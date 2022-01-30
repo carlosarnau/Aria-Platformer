@@ -288,6 +288,10 @@ bool Scene::Start()
 			originTex = app->tex->Load("Assets/sprites/Cross.png");
 			img = app->tex->Load("Assets/background/Background.png");
 			ingamegui = app->tex->Load("Assets/gamescreens/ingamegui.png");
+			livestate0 = app->tex->Load("Assets/sprites/livestate0.png");
+			livestate1 = app->tex->Load("Assets/sprites/livestate1.png");
+			livestate2 = app->tex->Load("Assets/sprites/livestate2.png");
+			livestate3 = app->tex->Load("Assets/sprites/livestate3.png");
 
 			edeath_fx = app->audio->LoadFx("Assets/audio/fx/enemy_death.wav");
 			ehit_fx = app->audio->LoadFx("Assets/audio/fx/enemy_hitted.wav");
@@ -387,6 +391,23 @@ bool Scene::Update(float dt)
 		{
 			app->render->DrawTexture(img, 0, 0, NULL);
 			app->render->DrawTexture(ingamegui, 0 + app->render->camera.x, 0, NULL);
+
+			if (app->player->GetPlayerLifes() == 0)
+			{
+				app->render->DrawTexture(livestate0, 0 + app->render->camera.x, 0, NULL);
+			}
+			else if (app->player->GetPlayerLifes() == 1)
+			{
+				app->render->DrawTexture(livestate1, 0 + app->render->camera.x, 0, NULL);
+			}
+			else if (app->player->GetPlayerLifes() == 2)
+			{
+				app->render->DrawTexture(livestate2, 0 + app->render->camera.x, 0, NULL);
+			}
+			else if (app->player->GetPlayerLifes() == 3)
+			{
+				app->render->DrawTexture(livestate3, 0 + app->render->camera.x, 0, NULL);
+			}
 
 			// Resetting the level at pressing F3
 			if ((app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) || (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))

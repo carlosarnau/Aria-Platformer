@@ -56,6 +56,10 @@ public:
 private:
 	bool titleMenu;
 
+	SDL_Texture* livestate0;
+	SDL_Texture* livestate1;
+	SDL_Texture* livestate2;
+	SDL_Texture* livestate3;
 	SDL_Texture* titleScreen;
 	SDL_Texture* menuscreen;
 	SDL_Texture* settingsscreen;

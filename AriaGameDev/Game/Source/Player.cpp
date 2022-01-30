@@ -182,7 +182,7 @@ bool Player::Start()
 		int y_ = (int)y;
 		ColHitbox->GetPosition(x_, y_);
 
-		lifes = 4;
+		lifes = 3;
 		isAlive = true;
 		deathAnimAllowed = false;
 		win = false;
@@ -520,7 +520,6 @@ void Player::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				}
 				else
 				{
-
 					//app->player->currentAnimation=&app->player->deathFromRightAnim;
 					app->audio->PlayFx(app->scene->pdeath_fx);
 					app->player->deathAnimAllowed = true;
