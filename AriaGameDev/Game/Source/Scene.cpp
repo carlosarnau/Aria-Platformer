@@ -283,21 +283,19 @@ bool Scene::Start()
 				RELEASE_ARRAY(data);
 			}
 
+			// Uploading the assets
 			pathTex = app->tex->Load("Assets/sprites/PathTexture.png");
 			originTex = app->tex->Load("Assets/sprites/Cross.png");
-
-			hit_fx = app->audio->LoadFx("Assets/audio/fx/player_hitted.wav");
-			edeath_fx = app->audio->LoadFx("Assets/audio/fx/enemy_death.wav");
-			ehit_fx = app->audio->LoadFx("Assets/audio/fx/b.wav");
-			shield_fx = app->audio->LoadFx("Assets/audio/fx/no.wav");
-			pdeath_fx = app->audio->LoadFx("Assets/audio/fx/death_player.wav");
-
-			// Uploading the assets
-			app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
 			img = app->tex->Load("Assets/background/Background.png");
-			water_fx = app->audio->LoadFx("Assets/audio/fx/Fall_in_water.wav");
-			fall_fx = app->audio->LoadFx("Assets/audio/fx/mixkit-lose-life-falling-2029.wav");
-			win_fx = app->audio->LoadFx("Assets/audio/fx/uno.wav");
+
+			edeath_fx = app->audio->LoadFx("Assets/audio/fx/enemy_death.wav");
+			ehit_fx = app->audio->LoadFx("Assets/audio/fx/enemy_hitted.wav");
+			hit_fx = app->audio->LoadFx("Assets/audio/fx/player_hitted.wav");
+			pdeath_fx = app->audio->LoadFx("Assets/audio/fx/death_player.wav");
+			water_fx = app->audio->LoadFx("Assets/audio/fx/touching_water.wav");
+			fall_fx = app->audio->LoadFx("Assets/audio/fx/player_falling.wav");
+			win_fx = app->audio->LoadFx("Assets/audio/fx/winning.wav");
+			app->audio->PlayMusic("Assets/audio/music/level_sound.ogg");
 
 			if (app->player->Awake() == 0)
 			{
@@ -429,9 +427,6 @@ void Scene::ResetLevel()
 	app->player->isAlive = true;
 	app->player->deathAnimAllowed = false;
 	app->player->SetPlayerWin(false);
-
-	app->audio->PlayMusic("Assets/audio/music/music_spy.ogg");
-
 	app->player->GetColHitbox()->body->SetTransform(v, 0);
 
 	// Walking Enemy
