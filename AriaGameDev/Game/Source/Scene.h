@@ -49,8 +49,6 @@ public:
 	uint ehit_fx;
 	uint edeath_fx;
 	uint pdeath_fx;
-
-	uint shield_fx;
 	
 	int currentLevel;
 	SDL_Texture* pathTex;
@@ -81,6 +79,8 @@ private:
 	PhysBody* sensor_win = nullptr;
 
 	sceneType pScene = MENUSCREEN;
+
+	float x, y;
 };
 
 #endif // __SCENE1_H__

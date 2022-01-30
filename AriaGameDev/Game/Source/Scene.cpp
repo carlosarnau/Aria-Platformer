@@ -386,19 +386,20 @@ bool Scene::Update(float dt)
 		case LEVEL1:
 		{
 			app->render->DrawTexture(img, 0, 0, NULL);
-			app->render->DrawTexture(ingamegui, 0, 0, NULL);
+			app->render->DrawTexture(ingamegui, 0 + app->render->camera.x, 0, NULL);
 
-			// L02: DONE 3: Request Load / Save when pressing L/S
+			// Resetting the level at pressing F3
+			if ((app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) || (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))
+			{
+				ResetLevel();
+			}
+
+			// L02: DONE 3: Request Load/Save when pressing L/S
 			if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 				app->LoadGameRequest();
 
 			if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 				app->SaveGameRequest();
-
-			if ((app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) || (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))
-			{
-				ResetLevel();
-			}
 
 			if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
 			{
