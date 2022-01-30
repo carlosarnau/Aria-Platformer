@@ -62,6 +62,7 @@ private:
 	SDL_Texture* menuscreen;
 	SDL_Texture* settingsscreen;
 	SDL_Texture* creditsscreen;
+	SDL_Texture* ingamegui;
 	SDL_Texture* map;
 	SDL_Texture* img;
 	SDL_Texture* originTex;

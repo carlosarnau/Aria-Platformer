@@ -287,6 +287,7 @@ bool Scene::Start()
 			pathTex = app->tex->Load("Assets/sprites/PathTexture.png");
 			originTex = app->tex->Load("Assets/sprites/Cross.png");
 			img = app->tex->Load("Assets/background/Background.png");
+			ingamegui = app->tex->Load("Assets/gamescreens/ingamegui.png");
 
 			edeath_fx = app->audio->LoadFx("Assets/audio/fx/enemy_death.wav");
 			ehit_fx = app->audio->LoadFx("Assets/audio/fx/enemy_hitted.wav");
@@ -306,7 +307,7 @@ bool Scene::Start()
 
 		case SETTINGS:
 		{
-			settingsscreen = app->tex->Load("Assets/gamescreens/menuscreen.png");
+			settingsscreen = app->tex->Load("Assets/gamescreens/settingsscreen.png");
 		}
 		break;
 
@@ -371,12 +372,21 @@ bool Scene::Update(float dt)
 				app->render->camera.x = 0;
 				return true;
 			}
+
+			if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+			{
+				app->ChangeScene(TITLESCREEN);
+
+				app->render->camera.x = 0;
+				return true;
+			}
 		}
 		break;
 
 		case LEVEL1:
 		{
 			app->render->DrawTexture(img, 0, 0, NULL);
+			app->render->DrawTexture(ingamegui, 0, 0, NULL);
 
 			// L02: DONE 3: Request Load / Save when pressing L/S
 			if (app->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
@@ -388,6 +398,14 @@ bool Scene::Update(float dt)
 			if ((app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) || (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN))
 			{
 				ResetLevel();
+			}
+
+			if (app->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+			{
+				app->ChangeScene(MENUSCREEN);
+
+				app->render->camera.x = 0;
+				return true;
 			}
 
 			// Draw map
