@@ -509,7 +509,6 @@ void Player::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			else if ((bodyA->id == 1) && (bodyB->id == 3))
 			{
 				// Fall and loose
-
 				if (app->player->GetPlayerLifes() > 0)
 				{
 					app->audio->PlayFx(app->scene->fall_fx);
