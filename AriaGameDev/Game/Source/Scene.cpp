@@ -47,14 +47,14 @@ bool Scene::Start()
 		case TITLESCREEN:
 		{
 			titleScreen = app->tex->Load("Assets/gamescreens/titlescreen.png");
-			app->audio->PlayMusic("Assets/audio/music/level_sound.ogg");
+			app->audio->PlayMusic("Assets/audio/music/menu_music.ogg");
 		}
 		break;
 
 		case MENUSCREEN:
 		{
 			menuscreen = app->tex->Load("Assets/gamescreens/menuscreen.png");
-			app->audio->PlayMusic("Assets/audio/music/level_sound.ogg");
+			app->audio->PlayMusic("Assets/audio/music/menu_music.ogg");
 		}
 		break;
 
