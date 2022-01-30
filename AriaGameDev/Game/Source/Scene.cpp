@@ -306,13 +306,13 @@ bool Scene::Start()
 
 		case SETTINGS:
 		{
-
+			settingsscreen = app->tex->Load("Assets/gamescreens/menuscreen.png");
 		}
 		break;
 
 		case CREDITS:
 		{
-
+			creditsscreen = app->tex->Load("Assets/gamescreens/creditsscreen.png");
 		}
 		break;
 	}
@@ -355,6 +355,22 @@ bool Scene::Update(float dt)
 				app->render->camera.x = 0;
 				return true;
 			}
+
+			if (app->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+			{
+				app->ChangeScene(CREDITS);
+
+				app->render->camera.x = 0;
+				return true;
+			}
+
+			if (app->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+			{
+				app->ChangeScene(SETTINGS);
+
+				app->render->camera.x = 0;
+				return true;
+			}
 		}
 		break;
 
@@ -381,13 +397,29 @@ bool Scene::Update(float dt)
 
 		case SETTINGS:
 		{
+			app->render->DrawTexture(settingsscreen, 0, 0, NULL);
 
+			if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+			{
+				app->ChangeScene(MENUSCREEN);
+
+				app->render->camera.x = 0;
+				return true;
+			}
 		}
 		break;
 
 		case CREDITS:
 		{
+			app->render->DrawTexture(creditsscreen, 0, 0, NULL);
 
+			if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+			{
+				app->ChangeScene(MENUSCREEN);
+
+				app->render->camera.x = 0;
+				return true;
+			}
 		}
 		break;
 	}
